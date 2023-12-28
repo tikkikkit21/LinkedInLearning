@@ -1,0 +1,18 @@
+git diff: displays changes
+
+git stash: "puts code in pocket", basically saves changes without committing it
+    pop: restores stashed changes
+    save [name]: saves changes under a name
+    list: displays stashes
+
+git add -p: the "p" flag will display each individual change so you can decide whether to add to the commit
+
+git reset --soft HEAD~1: useful for immediate commit (only use when commit hasn't been pushed to remote)
+
+git log: displays log of commits
+    --oneline: displays log in condensed view, each action is one line
+    --graph: displays a graphical representation of other actions, like merging from branches
+
+git commit --amend: technically a new commit, but basically overwrites the previous commit (works with pushed code)
+
+git revert [hash]: undos the commit (shows up in log as a new commit)

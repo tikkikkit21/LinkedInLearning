@@ -1,0 +1,198 @@
+==============
+General Things
+==============
+vim has many modes:
+  - insert mode (i): you can actually make edits to the file
+  - normal mode (esc or ctrl+C): you run commands
+  - visual mode (shift+v): highlights selections, where you can execute commands on
+  - diff mode (vim -d [file1], [file2], ...): displays different files side by side
+
+A "buffer" is basically contents of a file. Vim provides a "window", a way of 
+viewing that buffer and making edits
+
+To start vim with commands, we can do:
+
+  vim [filename] +[command]
+
+Ex. vim [test.txt] +8 will jump to line 8 in text.txt
+Ex. vim [test.txt] +/abc will jump to first occurence of "abc"
+
+Reverse order works too
+Ex. vim +1,2d +wq test.txt will delete first 2 lines, and then save and quit
+
+Vim can also be used to directly view and edit zip contents without needing to unzip
+========
+Commands
+========
+There are generally 2 forms of commands:
+  1. command is preceded with a colon (ex: '!qa!')
+  2. command is just straight up typed in, usually for navigation
+
+To run an external command via vim command line, precede with '!'
+  Ex: ':!ls' will run 'ls'
+
+:qa! - exits vim without saving
+  : = prefix for commands
+  q = quit vim
+  a = all opened files
+  ! = force close
+
+:w - saves file
+
+:w [filename] - saves as, under specified filename. Will still be editing original file 
+
+:e [filename] - opens up filename for editing, can use autocomplete like shell line. You
+                can open multiple files, with the most recent on top
+
+:e! - reloads file from disk, discarding unsaved changes
+
+:bd [filename] - closes file buffer
+
+:ls - lists current open buffers
+
+:bn - cycles through buffers
+
+:b [buffername] - goes to buffer name (autocomplete like shell)
+
+:b [buffer#] - uses the # listed in ':ls: to jump
+
+:r [filename] - copies contents of filename and pastes them behind cursor
+
+:r ![external command] - copies output of external command and pastest them
+
+ctrl+g - Views current file name
+
+o - same as 'i', except it creates a new line
+
+Instead of using arrow keys to navigate lines, use hjkl
+  h = left
+  j = down
+  k = up
+  l = right
+Use vim-adventures.com to practice
+These can be prefixed with numbers to indicate how many times for the command to repeat
+  ex: 6L will move cursor 6 characters to the right
+
+w - navigates words
+() - navigates sentences
+{} - navigates paragraphs
+
+/[word] will search for a word that matches or starts with [word]
+This is a regex so placeholders can be used
+  . = match any character
+
+n - gets next result of command if applicable (like searches)
+
+shift+G - moves to beginning of file
+
+gg - moves to end of file
+
+ctrl+f - moves forward by a page (page down)
+
+ctrl+b - moves backward by a page (page up)
+
+:[linenumber] - goes to the specified line number in file (useful for coding)
+
+0 - beginning of line
+
+$ - end of line
+
+u - undo
+
+* - searches for next occurence of word under cursor
+
+# - like *, but backwards
+
+d - deletes content
+  dw - deletes word
+  d) - deletes sentence
+  dd - deletes line
+  d /[regex] - deletes content up to regex
+
+y - copy
+  yw - copies word
+  yy - copies line
+
+p - pastes content after cursor
+
+shift+P - pastes content before cursor
+
+x - cuts character
+
+c - changes (deletes and instantly goes into insert mode)
+  cw - changes word
+  c /[regex] - changes content up to regexc
+
+"[letter][command] - saves command results to vim register (letter can be a-z or A-Z)
+
+:s/[oldword]/[newword] - replaces first occurrence of oldword with newword
+
+
+:s/[oldword]/[newword]/g - replaces all (g flag is for global) occurrences of oldword with newword
+
+m[mark] - sets a mark, which can be a-z or A-Z
+
+'[mark] - jumps to mark
+  '. - jumps to last edit
+
+ctrl+o - jumps back in history (place of last jump)
+
+ctrl+i - jumps forward in history
+
+:jumps - lists history of jumps
+
+:split - splits window into 2, each showing the same file (edits will sync live)
+
+:diffsplit [filename] - splits window into 2, with second window showing filename 
+
+ctrl+w w - cycles between windows
+
+ctrl+w c - closes window
+
+gf - goes to file who's name the cursor is hovering over. Can also fetch URLs if
+     wget or something is installed
+
+g+shift+f - goes to file and line number
+=============
+Configuration
+=============
+.vimrc is basically bashrc, but for vim. It makes changes permanent. You can add
+comments by precedcing line with double quotes (").
+
+:set - lists current settings of vim
+
+:set number/nonumber - enables line numbers
+
+:noremap <newkey> <oldkey> - maps newkey to oldkey's action
+  Ex. :noremap <SPACE> <C-F>
+
+:abb [abbreviation] [expanded form] - sets abbreviations that vim will auto-expand.
+                                      This is useful for spelling auto-correct and
+                                      shortcuts for long, often-used words
+
+ctrl+v - use right after typing an abbreviation to stop auto-expand
+
+:com! [command] ! [external command] [args] - adds a new command that will run external
+                                              command with args. New command has to start
+                                              with a capital letter
+  Ex: ':com! Py ! python %' will run this file (% means this file's name)
+
+:set ic - sets searches to be case insensitive
+
+:noh - disables highlighting
+
+:set clipboard=unnamedplus - integrates vim's clipboard with system's'
+
+:syntax on - turns on syntax highlighting
+
+:colorscheme [scheme] - chooses a color scheme for vim
+
+:set dip+=vertical - sets diff splits to be vertical rather than horizontal
+
+
+
+
+
+
+
+

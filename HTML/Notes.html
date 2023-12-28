@@ -1,0 +1,304 @@
+<!DOCTYPE HTML>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <meta name="description" content="My notes from the LinkedIn Learning course: HTML Essential Training">
+        <title>HTML Notes</title>
+        <style>
+            html {
+                background: #E96228;
+            }
+        </style>
+    </head>
+    <body>
+        <h1>My LinkedIn Learning HMTL Notes</h1>
+        
+        <header>
+            <p>There are my notes from the LinkedIn Learning course "HTML Essential Training", a combination of notes from the 2017 and 2020 versions. I originally wrote my notes in a text file, but now I'm going to practice what I learned by converting my notes into a displayable HTML document. The editor I'll be using is Brackets since the live preview is very useful. Hopefully I can use this to enrich my HTML learning!</p>
+            <ul>
+                <li><a href="#html-tags">HTML Tags</a></li>
+                <li><a href="#content-models">Content Models</a></li>
+                <li><a href="#behind-the-scenes">Behind-The-Scenes</a></li>
+                <li><a href="#structure">Structure</a></li>
+                <li><a href="#text-formatting">Text Formatting</a></li>
+                <li><a href="#character-references">Character References</a></li>
+                <li><a href="#lists">Lists</a></li>
+                <li><a href="#quotes">Quotes</a></li>
+                <li><a href="#dates-and-times">Dates and Times</a></li>
+                <li><a href="#structure">Structure</a></li>
+                <li><a href="#media">Images</a></li>
+                <li><a href="#wai-aria-roles">WAI-ARIA Roles</a></li>
+                <li><a href="#links">Links</a></li>
+                <li><a href="#css">CSS</a></li>
+                <li><a href="#javascript">JavaScript</a></li>
+            </ul>
+        </header>
+        
+        <main role="main">
+            <h2 id="html-tags">HTML Tags</h2>
+            <p>A basic HTML tag has the following syntax: <code>&lt;tag&gt;content&lt;/tag&gt;</code>. Most tags <code>&lt;tag&gt;</code> will have a corresponding closing tag <code>&lt;/tag&gt;</code>.</p>
+            <p>Certain tags don't need a closing tag, like <code>&lt;br&gt;</code> and <code>&lt;meta&gt;</code>. In older code, they may be writte as <code>&lt;br /&gt;</code>. This is because older versions of HTML required closing tags for everything, so this syntax indicates a "self-closing tag", where the tag is both an open and close tag. Just something to keep in mind, it's not necessary for HTML5</p>
+            <p>Tags can be nested. A nested tag is typically called the <i>child</i>, with the higher tag being the <i>parent</i>. Tags at the same nesting level are called <i>siblings</i>. Keep in mind that child tags must close before parents do.</p>
+            <p>Tags can also have attributes to them, which can add additional info to the tag's content. The syntax is <code>&lt;tag attribute="value"&gt;content&lt;/tag&gt;</code>. Some common global attributes are:</p>
+            <ul>
+                <li><code>class</code> useful for CSS</li>
+                <li><code>id</code> useful for JS</li>
+                <li><code>contenteditable</code> allows users to modify content</li>
+                <li><code>lang</code> and <code>dir</code> help specify the language and direction of text flow that the element's content contains</li>
+            </ul>
+
+
+            <h2 id="content-models">Content Models</h2>
+            <p>In the beginning, there were generally 2 types of tag models: block and inline. Block models appeared one after the each other, while inline models would appear in the middle of the content</p>
+            <blockquote>
+                <p><code>&lt;p&gt;</code>The paragraph tag is a block model.<code>&lt;/p&gt;</code></p>
+
+                <p><code>&lt;p&gt;</code>Notice that each paragraph is a separate block.<code>&lt;/p&gt;</code></p>
+
+                <p><code>&lt;p&gt;</code>However, for inline models like <b>bolding</b>, <i>italics</i>, and <code>code</code>, they don't disrupt the flow and formatting of the rest of the content<code>&lt;/p&gt;</code></p>
+            </blockquote>    
+            <p>Today, HTML5 has expanded to 7 models:</p>
+            <ul>
+                <li>Flow: <i>Elements included in normal flow of the document. Huge category that pretty much encompasses the rest of the categories</i></li>
+                <li>Metadata: <i>Sets up the document presentation and behavior</i></li>
+                <li>Embedded: <i>Imports external resources to the document, like vidoes, links, and images</i></li>
+                <li>Interactive: <i>Content that's intended for any kind of user interaction, like buttons or drop down menus</i></li>
+                <li>Heading: <i>Defines the header of a section, only includes tags</i> <code>&lt;h1&gt;</code> - <code>&lt;h6&gt;</code></li>
+                <li>Phrasing: <i>Marks up text within content. Basically the former inline model with bolding, italics, and code</i></li>
+                <li>Sectioning: <i>Defines the scope of headers and footers of a document</i></li>
+            </ul>
+
+            <h2 id="behind-the-scenes">Behind-the-Scenes</h2>
+            <p><code>&lt;!-- btw this is what a comment looks like --&gt;</code></p>
+            <p>Every HTML document needs a doctype tag at the very top of the document. This indicates to the brower that the incoming document is HTML. We can also specify different HTML versions, with the default being HTML5</p>
+            <blockquote>
+                <code>&lt;!DOCTYPE HTML&gt;</code>
+            </blockquote>
+            <p>After <code>doctype</code> is the <code>&lt;html&gt;</code> tag. This tag encompasses the entire document (besides doctype). The <code>html</code> tag has a <code>lang</code> attribute. Indicating the language of the document is very helpful for services like spellchecker, translators, and screen readers. To set document to English, use:</p>
+            <blockquote>
+                <code>&lt;html lang="en"&gt;</code>
+            </blockquote>
+            <p>Next up is the <code>&lt;head&gt;</code> tag. The <code>head</code> tag contains all the document's metadata. Some example meta tags are:</p>
+            <blockquote>
+                <p><code>&lt;meta charset="utf-8"&gt;</code>
+                <br>Indicates the character encoding for the document. Ensures that the browser renders special characters and symbols properly</p>
+                <p><code>&lt;meta name="description" content="insert description"&gt;</code>
+                <br>Provides a small description for the HTML document. Useful for indexing by search engines or yourself</p>
+                <p><code>&lt;title&gt;Document Title&lt;/title&gt;</code><br>Sets the title of the document (shows up on the tab name in Chrome). Note that the <code>title</code> tag needs a closing tag, whereas <code>meta</code> doesn't</p>
+            </blockquote>
+            <p>Finally we have the <code>&lt;body&gt;</code> tag. The <code>body</code> tag is a sibling to the <code>head</code> tag. The <code>body</code> tag is what contains all the content of the document</p>
+
+            <h2 id="structure">Structure</h2>
+            <p>Structure is very important for HTML documents, otherwise there's no hierarchy in the doc. Structure is not just for visual aesthetics; it's also helpful for services to figure out what content is the most important. A helpful website for figuring your document online is <a href="https://gsnedders.html5.org/outliner/">https://gsnedders.html5.org/outliner/</a>.</p>
+            <p><code>&lt;p&gt;</code> One of the most basic, and common, tag is the paragraph tag. Each set of <code>&lt;p&gt;</code> tags creates a new paragraph containing the content within the tags. The line spacing between paragraphs can be adjusted using CSS. Technically, closing paragraph tags are optional in HTML5, but it's a bad practice to avoid</p>
+            <p><code>&lt;h#&gt;</code> Another common structure tag is the header tag, where <code>#</code> is between 1 and 6. <code>&lt;h1&gt;</code> has the largest header font while <code>&lt;h6&gt;</code> is the smallest. A key mistake to avoid is to choose header types based on their size and font. Choose header #'s based on hierarchy, leave appearance to CSS</p>
+            <p>These are some useful tags for making webpages. Also probably handy for ENGL3844 assignments. These tags are examples of "semantic HTML", where the tags convey the actual meaning of what they are used for (tags like <code>&lt;div&gt;</code> and <code>&lt;span&gt;</code> are not semantic HTML). These tags are not automatically positioned by the browser, so you need to use CSS to put them where you want</p>
+            <h3>Sectioning Elements</h3>
+            <p><code>&lt;h1&gt;</code> - <code>&lt;h6&gt;</code> Standard header tags</p>
+            <p><code>&lt;article&gt;</code> Represents a part of the webpage that conveys particular information. Could be a combination of text, images, videos, and/or embeds. A good way to think about them is individaul elements of a page that can stand alone (don't need context to make sense)</p>
+            <p><code>&lt;aside&gt;</code> Represents the information that is relevant to the page's content, typically in the form of a sidebar of a webpage. Content could be side notes, warnings, or information that will eventually be replaced in the future. <code>aside</code> elements should be nested within the section that the content is relevant to</p>
+            <p><code>&lt;section&gt;</code> Defines a particular section of the HTML document. Multiple sections can exist in the same document. The difference between <code>section</code> and <code>article</code> is that <code>section</code> is used when you want content to be listed in a document outline, but it can't stand alone like an <code>article</code> could. Generally, you would use <code>article</code> for most sectioning purposes</p>
+            <p><code>&lt;nav&gt;</code> Represents a section of a page that links to other pages or parts within a page. Navigation items like home, contact, and FAQs. Note that not all links have to be <code>nav</code> elements. In general, <code>nav</code> elements are only used for links within a site, not external sites</p>
+            <p><code>&lt;div&gt;</code> A generic structuring tag that groups tags together. Should be used as a last resort when there's no other available tags that suffice for the grouping purpose. <code>div</code> has a <code>class</code> attribute where you can give a name to the group</p>
+            <blockquote>
+                <code>&lt;div class="book"&gt;</code><br>
+                    &emsp;<code>&lt;h5&gt;</code>The Hobbit<code>&lt;/h5&gt;</code><br>
+                    &emsp;<code>&lt;p&gt;</code>by J.R.R Tolkien<code>&lt;/p&gt;</code><br>
+                    &emsp;<code>&lt;p&gt;</code>A tiny human finds a ring and goes on an adventure<code>&lt;/p&gt;</code><br>
+                <code>&lt;/div</code>
+            </blockquote>
+            <h3>Semantic Elements</h3>
+            <p><code>&lt;main&gt;</code> Contains main sections of the HMTL document, like <code>&lt;header&gt;</code> and <code>&lt;footer&gt;</code> There should only be one <code>main</code> section in the entire document</p>
+            <p><code>&lt;header&gt;</code> Defines the intro section of a web page (contains items such as logos, navigation, and themes). Usually goes hand-in-hand with an <code>article</code> section</p>
+            <p><code>&lt;footer&gt;</code> Footers of a webpage, like quick links, copyright info, and other data that might be relevant to the entire website</p>
+
+            <h2 id="text-formatting">Text Formatting</h2>
+            <p>Most text formatting is done inline. Some formatting can also have affects on services like screen readers.</p>
+            <p><code>&lt;i&gt;</code> Visual-only <i>italics</i></p>
+            <p><code>&lt;b&gt;</code> Visual-only <b>bolding</b></p>
+            <p><code>&lt;em&gt;</code>Emphasis <i>italics</i> (screen readers will also put verbal emphasis on the word)</p>
+            <p><code>&lt;strong&gt;</code> Emphasis <b>bolding</b> (screen readers will also put verbal emphasis on the word)</p>
+            <p><code>&lt;code&gt;</code> Simple in-line <code>code</code> formatting</p>
+            <p><code>&lt;br&gt;</code> Does a line break (doesn't need a closing tag). Doesn't create a space between lines like <code>&lt;p&gt;</code> does</p>
+            <p><code>&lt;pre&gt;</code> Preserves whitespace and indentation like it's written in the HTML document. Often used for code snippets since formatting has to be a certain way, so it'll typically display as monospace</p>
+            <p><code>&lt;sub&gt;</code> Creates a sub<sub>script</sub></p>
+            <p><code>&lt;sup&gt;</code> Creates a super<sup>script</sup></p>
+            <p><code>&lt;small&gt;</code> Makes test smaller, like <small>fine print</small></p>
+
+            <h2 id="character-references">Character References</h2>
+            <p>HTML doesn't have escape characters, so if we want to display symbols (like angle brackets) without the browser interpreting it as actual code, we use character references. Some examples are:</p>
+            <blockquote>
+                <p><code>&amp;lt;</code> is the <code>&lt;</code> sign</p>
+                <p><code>&amp;gt;</code> is the <code>&gt;</code> sign</p>
+                <p><code>&amp;emsp;</code> is a 4&emsp;space tab (like <code>\t</code>)</p>
+            </blockquote>
+            <p>A good reference is <a href="https://en.wikipedia.org/wiki/List_of_XML_and_HTML_character_entity_references">Wikipedia</a></p>
+
+            <h2 id="lists">Lists</h2>
+            <p>Lists are useful for displaying items, whether it's bullet points, numbered, or others</p>
+            <p><code>&lt;li&gt;</code> General tag for a list item, regardless of list type</p>
+            <p><code>&lt;ul&gt;</code> Unordered list (bullet points)</p>
+            <ul>
+                <li>Item 1</li>
+                <li>Item 2</li>
+                <li>Item 3</li>
+            </ul>
+            <p><code>&lt;ol&gt;</code> Ordered list (numbered)</p>
+            <ol>
+                <li>Item 1</li>
+                <li>Item 2</li>
+                <li>Item 3</li>
+            </ol>
+            <p><code>&lt;dl&gt;</code> Definition (or description) list, where each item has a term and definition (think key-value pairs)</p>
+            <blockquote>
+                <dl>
+                    <dt><code>&lt;dt&gt;</code>Term name<code>&lt;/dt&gt;</code></dt>
+                        <dd><code>&lt;dd&gt;</code>Term definition<code>&lt;/dd&gt;</code></dd>
+                        <dd><code>&lt;dd&gt;</code>Additional definitions if needed<code>&lt;dd&gt;</code></dd>
+                        <dd><code>&lt;dd&gt;</code>...<code>&lt;dd&gt;</code></dd>
+                </dl>
+            </blockquote>
+            <p>Example list code:</p>
+            <blockquote><code>
+                <code>&lt;ul&gt;</code>
+                <br>&emsp;&emsp;<code>&lt;li&gt;</code>list item 1<code>&lt;/li&gt;</code>
+                <br>&emsp;&emsp;<code>&lt;li&gt;</code>list item 2<code>&lt;/li&gt;</code>
+                <br>&emsp;&emsp;<code>&lt;li&gt;</code>list item 3<code>&lt;/li&gt;</code>
+                <br><code>&lt;/ul&gt;</code>
+            </code></blockquote>
+            <p>Lists can be nested to create sublists by creating a new list within a list item <code>&lt;li&gt;</code>, like so:</p>
+            <blockquote>
+                <code>&lt;li&gt;</code>
+                <br>&emsp;&emsp;<code>&lt;ul&gt;</code>
+                <br>&emsp;&emsp;&emsp;&emsp;<code>&lt;li&gt;</code>list item 1<code>&lt;/li&gt;</code>
+                <br>&emsp;&emsp;&emsp;&emsp;<code>&lt;li&gt;</code>list item 2<code>&lt;/li&gt;</code>
+                <br>&emsp;&emsp;&emsp;&emsp;<code>&lt;li&gt;</code>list item 3<code>&lt;/li&gt;</code>
+                <br>&emsp;&emsp;<code>&lt;/ul&gt;</code>
+                <br><code>&lt;/li&gt;</code>
+            </blockquote>
+            <p>Ordered lists also have some fun atrributes:</p>
+            <blockquote>
+                <p><code>start</code> indicates which number or letter that the list should start with. For example, doing <code>&lt;ol start="6"&gt;</code> will have the list start with 6,7,8,...</p>
+                <p><code>reversed</code> will reverse the ordering, with the bottom as the starting point (<code>&lt;ol reversed&gt;</code>)</p>
+                <p><code>type</code> changes the order notation (numbers, roman numerals, letters, etc.) like so: <code>&lt;ol type="a"&gt;</code></p>
+            </blockquote>
+
+            <h2 id="quotes">Quotes</h2>
+            <p><code>&lt;cite&gt;</code> Used for the source/author of quote</p>
+            <blockquote>
+                <p>"This is a quote by someone famous"</p>
+                <p><cite>cite tag</cite></p>
+            </blockquote>
+            <p><code>&lt;blockquote&gt;</code> Creates an indented block for block quotes (quotes that are separate from other paragraphs). Can also be used for indented paragraphs</p>
+            <blockquote>
+                <p>Pretended this is article content blah blah blah...now we're going to quote someone:</p>
+                <blockquote>
+                    <p>"Blockquotes are awesome<br>and they are very useful<br>and I'm so cool trololol"</p>
+                </blockquote>
+                <p>And now we resume back to the normal article</p>
+            </blockquote>
+            <p><code>&lt;q&gt;</code> Quote marks that are worked into the middle of a sentence. We use these instead of actual quote marks to allow broswers to provide the appropriate quote style based on language</p>
+
+            <h2 id="dates-and-times">Dates and Times</h2>
+            <p><code>&lt;time datetime="YYYY-MM-DD"&gt;</code> Used for formatting dates. Doesn't change the appearance of the text, but indicates to the browser that it's a valid date</p>
+            <p><code>&lt;time datetime="hh-mm-ss.ddd+-hh:mm"&gt;</code> Formatting time with the option of a UTC offset</p>
+            <p><code>&lt;time datetime="YYYY-MM-DD hh-mm-ss.ddd+-hh:mm"&gt;</code> Date and time attributes can be combined</p>
+
+            <!--Media-->
+            <h2 id="media">Media</h2>
+            <h3>Images</h3>
+            <p><img src="code.jpg" width="255" height="170" alt="Code Background">
+            <br>When a browser encounters an image tag, it replaces that tag with an image based on the information given to it. Therefore it's really important to maintain the correct attributes. The image tag is actually an inline tag, so it needs to be contained within paragraphs or other structure tags. Here are some attributes that are important:</p>
+            <ul>
+                <li><p><code>src</code> Indicates the source of the image. Usually the relative path to the image file in the directory that the HTML file is in. The only non-optional attribute</p></li>
+                <li><p><code>width</code> Width of image in pixels. If not specified, the browser will display the image at its default size. However, it could cause the image to be disorted, so best to specify </p></li>
+                <li><p><code>height</code> Height in pixels. Same practice as width</p></li>
+                <li><p><code>alt</code> Gives a short description to the image</p></li>
+                <li><p><code>srcset</code> Creates a responsive image based on screen resolution or width</p></li>
+            </ul>
+            <p>Note that the <code>img</code> tag doesn't need a closing tag. To change image alignment, it's best to use CSS. There is a deprecated <code>align</code> attribute, and while most browsers still support it, CSS is the best way to go.</p>
+            <p>To add captions to figure we need to use 2 elements: <code>figcaption</code> and <code>figure</code>. The <code>figcaption</code> element is a sibling with <code>img</code>, with the <code>figure</code> wrapping the two.</p>
+            <h3>Audio</h3>
+            <p>Similar to images, we have an <code>&lt;audio&gt;</code> element with a <code>src</code> attribute that points to the location of the file (either local file or external source). There are other useful attributes:</p>
+            <ul>
+                <li><p><code>loop</code> audio automatically loops back to beginning</p></li>
+                <li><p></p><code>autoplay</code> audio automatically plays on page load</</li>
+            </ul>
+
+            <h2 id="wai-aria-roles">WAI-ARIA Roles</h2>
+            <p>ARIA roles are used for improved accessibility with the <code>role</code> attribute in tags. This helps things like screen readers to better understand the structure of our article. Some examples include:</p>
+            <ul>
+                <li><p><code>banner</code> site-oriented content like logos</p></li>
+                <li><p><code>main</code> main content of the page</p></li>
+                <li><p><code>navigation</code> page navigation tools</p></li>
+                <li><p><code>complementary</code> extra information for the page like <code>aside</code></p></li>
+            </ul>
+            <p>Note that some roles have the exact same name as their tags which seems like overkill. However, since they're fairly new and not all browsers/tools support roles, it's best to use both for now.</p>
+            
+            <h2 id="links">Links</h2>
+            <p>Links are super important for HTML pages and the Internet. They can be linked to external pages, other HTML pages, and even sections within the page. Links use the anchor element: <code>&lt;a&gt;</code>, which is an inline element. The general form is <code>&lt;a href="link" title="title"&gt;</code>. <code>href</code> is the link to the destination. <code>title</code> provides a short description of where the link leads to, useful for assistive tech like screen readers.</p>
+            <p><code>&lt;a href="path to HTML file"&gt;</code> is used to redirect to other HTML documents. <code>href</code> is the relative path to the document (where we use <code>../</code> and whatnot). Something we can do is just specify the folder of the relative path. The browser will then automatically look for an <code>index.html</code> file to display.</p>
+            <p><code>&lt;a href="link to external page"&gt;</code> can be used to redirect to external websites. Make sure it's the full link (starts with http or https), not just "www"</p>
+            <p><code>&lt;a href="path to download file" download&gt;</code> is used for downloadable content. Normally, if a browser can't display a particular document (where <code>href</code> points to some file in the directory like .zip or .exe), it will automatically download it. However, if the browser <em>can</em> display it (.html or .pdf), then it'll actually display it. In that case, we need to explicitly specify for it to be downloaded with the <code>download</code> attribute. If we want to rename the file for downloading, we can set the atrribute equal to the new name: <code>download="new name"</code></p>
+            <p><code>&lt;a href="path to HTML file"&gt;</code> lets us jump to sections within the document. Before setting the anchor element, we need to add the <code>id</code> attribute to headers of the sections. This ID is called a <i>fragment identifier</i> lets the anchor element identify which section to jump to: <code>&lt;h1 id="one"&gt;</code>. Afterwards, we set the <code>href</code> attribute to <code>#[section id]</code> like so: <code>&lt;a href="#one"&gt;</code>. To link to regions in other pages, you just need to find the fragment identifier of that page and use it like so: <code>&lt;a href="[filename]#[fragment id]"&gt;</code>. For example: <code>&lt;a href="intro.html#me"&gt;</code> will jump to the "me" section in "intro.html". Same thing applies to external websites, just append the fragment id to the full link with the <code>#</code> (this is why the url's for some specific webpages contain # signs, like Wikipedia)</p>
+            
+            <h2 id="css">CSS</h2>
+            <p>CSS is great for formatting blah blah blah...The general form is <code>"[property]:[value];</code></p>
+            <p>One way to use CSS is to use the <code>style</code> attribute. You can then set properties like <code>color</code> and <code>font-weight</code> so: <code>&lt;p style="color:red;font-weight:normal;"&gt;</code>. However, this can be a pain to manually set and update them</p>
+            <p>A more efficient way is to use the <code>style</code> element in the <code>head</code> section. Afterwards, you can change the appearance for each element (to specify a global default, set the properties under <code>body</code>):</p>
+            <blockquote>
+                <code>&lt;style&gt;</code><br>
+                &emsp;<code>h2 {color:red; font-weight:normal;}</code><br>
+                <code>&lt;style&gt;</code><br>
+                (this can also be expanded into a code block style)
+            </blockquote>
+            <p>Can also use it for class indicators. Instead of <code>h2</code>, we can do <code>.[indicator] { properties }</code> where every element with the <code>class="indicator"</code> attribute. We can also do <code>[element].[indicator] { properties }</code> where both element and class indicator has to match</p>
+            <p>Some of the properties we can set are:</p>
+            <ul>
+                <li><code>font-family</code> font like Georgia, Times New Roman, etc.</li>
+                <li><code>font-size</code> where you can specifiy it with <code>[x]em</code> where <code>em</code> is the default font and x is the factor. This is more dynamic than setting pixels, since it adjusts the relative size (16p is small on computer, massive on phone). <code>font-size: 2em;</code> means twice the default font size</li>
+                <li><code>font-style</code> bold, italic</li>
+                <li><code>line-height</code> spacing between </li>
+                <li><code>margin</code></li>
+                <li>...and more!</li>
+            </ul>
+            <p>To set color, you use hex codes. Some atrributes include:</p>
+            <ul>
+                <li><code>background-color</code> (background color of entire document)</li>
+                <li><code>background</code> (background of specific elements)</li>
+                <li><code>border-bottom</code></li>
+            </ul>
+            <p>So far, all these changes only apply to the document they're in. In order to externalize these styles (apply styles to every HTML doc in workspace/webpage, we need to create a <code>.css</code> file. Basically, move all the code under the <code>style</code> elements into the CSS file. Replace the <code>style</code> element with a <code>link</code> element:</p>
+            <blockquote><code>&lt;link rel="stylesheet" href="link to css file"&gt;</code></blockquote>
+            
+            <h2 id="javascript">JavaScript</h2>
+            <p>JavaScript adds interactivity to HTML documents, like buttons and drop-down menus. To add a JS script, use the <code>&lt;script&gt;</code> element. This is generally a standalone element (not nested anywhere) contained within the <code>body</code> section.</p>
+            <p>One script we can set up is <code>window.onload</code>. This function will run once the browser window is done loading. We would do something like:</p>
+            <blockquote>
+                <code>window.onload = function() {</code><br>
+                &emsp;<code>// insert code</code><br>
+                <code>}</code>
+            </blockquote>
+            <p>To get elements from the document, we can use the <code>document</code> object and its functions like <code>getElementById()</code> or <code>getElementsByTagName()</code></p>
+            <p>To externalize the JS scripts, export them into a .js file. Then we change the <code>&lt;script&gt;</code> element by adding a <code>src="path to js file"</code> attribute. Remember to add a closing <code>script</code> tag!</p>
+        </main>
+        <script>
+            // insert JS code here. I can declare variables and functions
+            const msg = "Hello Tikki!"
+            
+            window.onload = function() {
+                console.log(msg);
+            }
+            
+            function myFunction() {
+                document.getElementById("javascript")
+            }
+        </script>
+    </body>
+</html>
+
+<!--
+
+<p><code>&lt;tag&gt;</code></p>
+
+-->
