@@ -1,7 +1,4 @@
 # Machine Learning with Python: Foundations
-https://www.linkedin.com/learning/machine-learning-with-python-foundations
-
-## Intro
 - Computers receive 2 things
     - An input or data
     - A set of instructions on what to do
@@ -9,6 +6,13 @@ https://www.linkedin.com/learning/machine-learning-with-python-foundations
     - We give an input and expected output
     - Computer figures out the instructions
 - Focus of ML is to predict
+- 6 Phases of ML
+    1. Data Collection
+    2. Data Exploration
+    3. Data Preparation
+    4. Model
+    5. Evaluate Model
+    6. Actionable Insight
 
 ## Data Collection
 ### Considerations
