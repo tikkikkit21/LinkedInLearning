@@ -13,3 +13,6 @@ code. It's really hard to paste nice-looking code snippets in Google Docs, and
 it's hard to organize English notes in a code file itself via comments. I feel
 like Markdown just bridges the gap and I find it well-suited for my note-taking
 needs.
+
+Note: The `main` branch is where I store *completed* courses. If you want to see
+courses I'm currently in progress of, check out the branches!
