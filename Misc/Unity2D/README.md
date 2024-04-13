@@ -42,7 +42,50 @@ https://www.linkedin.com/learning/unity-5-2d-essential-training
   resolution
 - We can create a script that can automatically resizes the camera zoom level
 - See `Assets/Scripts/PixelPerfectCamera.cs`
+- Some notes
+    - The `Start()` function is called at beginning of game
+    - The `Update()` function is called once every frame
+    - Any public class members will show up as a parameter when using the script
 - We can drag this script into the `Main Camera` in the hierarchy
     - Note that this script only runs at the start of a game
     - Changing resolution in the middle won't auto resize
 
+## Repeating Textures
+### Textures
+- <u>Textures</u> can be repeated for a pixel background
+- Create one with `GameObject > 3D Object > Quad`
+- Although a *Quad* is a 3D object, they're useful for 2D background textures
+    - Easy to apply and scale textures
+- A *Quad* has a `z` property that can be useful
+    - Technically don't need it since we're working with 2D
+    - However, it can be useful for layering with other objects
+- We need a <u>material</u> to apply texture to the quad
+    - Stored in `Assets/Textures`
+- We create one as a new *Material* file
+    - In the Inspector, we can select the texture we want
+    - Then drag the material/texture file onto the quad and texture will be applied
+
+### Resizing Textures
+- We can resize our quad to fill up the screen
+- However, this just makes a single texture really big
+- We can go into our texture file and changing the `tiling` properties
+    - This determines how many times the tiles repeat in order to reach the
+      desired size
+- Instead of manually doing this for each resolution, we can make another 
+  script
+- See `Assets/Scripts/TiledBackground.cs`
+
+### Animate Scrolling Background
+- We can use the offset to make it look like the background is scrolling by
+    - Player is technically standing still
+    - Scrolling background makes it look like it's moving
+- See `Assets/Scripts/AnimatedTexture.cs`
+
+### Emulate Parallax Scrolling
+- Can remove the *Mesh Collider* from the background *quad*
+    - Used in 3D, not needed
+- <u>Parallax scrolling</u> is a concept to add depth perception
+    - The foreground scrolls by faster than the background
+- We can do this by changing the speed parameter to the `AnimatedTexture.cs`
+  script
+    - Set the foreground speed to be a little faster than background
