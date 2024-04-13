@@ -3,3 +3,9 @@ __pycache__
 .env
 .R*
 .vscode
+Library
+obj
+Temp
+Logs
+UserSettings
+.vs
