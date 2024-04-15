@@ -37,11 +37,11 @@ https://www.linkedin.com/learning/unity-5-2d-essential-training
 - This can result in exponential savings the more assets and sprites we have
 
 ### Pixel Perfect Camera
+See `PixelPerfectCamera.cs`
 - Recall that we want to set 1 grid square = 1 pixel
 - This can result in different zoom levels based on device screen size and
   resolution
 - We can create a script that can automatically resizes the camera zoom level
-- See `Assets/Scripts/PixelPerfectCamera.cs`
 - Some notes
     - The `Start()` function is called at beginning of game
     - The `Update()` function is called once every frame
@@ -66,6 +66,7 @@ https://www.linkedin.com/learning/unity-5-2d-essential-training
     - Then drag the material/texture file onto the quad and texture will be applied
 
 ### Resizing Textures
+- See `TiledBackground.cs`
 - We can resize our quad to fill up the screen
 - However, this just makes a single texture really big
 - We can go into our texture file and changing the `tiling` properties
@@ -73,13 +74,12 @@ https://www.linkedin.com/learning/unity-5-2d-essential-training
       desired size
 - Instead of manually doing this for each resolution, we can make another 
   script
-- See `Assets/Scripts/TiledBackground.cs`
 
 ### Animate Scrolling Background
+- See `AnimatedTexture.cs`
 - We can use the offset to make it look like the background is scrolling by
     - Player is technically standing still
     - Scrolling background makes it look like it's moving
-- See `Assets/Scripts/AnimatedTexture.cs`
 
 ### Emulate Parallax Scrolling
 - Can remove the *Mesh Collider* from the background *quad*
@@ -89,3 +89,53 @@ https://www.linkedin.com/learning/unity-5-2d-essential-training
 - We can do this by changing the speed parameter to the `AnimatedTexture.cs`
   script
     - Set the foreground speed to be a little faster than background
+
+## Obstacles
+### Reusable Obstacle Game Object
+- A <u>spawner</u> creates assets on the screen
+    - Uses the (0,0) coord of a sprite to position it
+- The corresponding sprite property is `pivot`
+    - Determines where the sprite's (0,0) is located
+    - In a runner game, we want to set it to bottom so we can ensure each 
+      different sprite spawns flush to the floor
+- To apply physics to our obstacle, we add a component called *Rigidbody 2D*
+    - Allows it to be an unmovable force
+    - Freeze rotation
+    - When our player hits it, it'll be pushed off screen
+- Remember that the `z` value for position determines layering
+    - The smaller it is, the nearer it is (includes negative numbers)
+    - Set floor `z=1` so obstacles can be in front of floor
+- A <u>prefab</u> is a re-usable game object
+    - Configured in scene or folder
+    - Used by spawners
+    - Files in a `Prefab` folder
+
+### Moving Obstacles
+- See `InstantVelocity.cs`
+- We add a *Boxcollider 2D* component to our obstacles
+    - Handles collision logic
+    - Interacts with other colliders in the game, like one on the player
+- We can use a script to move object across screen
+- The `FixedUpdate()` function is called a certain number of times
+    - More efficient than `Update()`
+- We can set the collider's `interpolate` property to "interpolate"
+    - Smooths the refresh rate on the object
+    - Makes it less "jittery"
+
+### Spawn New Obstacles
+- A <u>spawner</u> uses a timer to create new objects in time intervals
+- Also requires a script
+- Spawners use handy dandy coroutines
+
+### Random Spawner Delay Times
+- We can nest objects inside others
+    - Or use empty game objects purely as "folders"
+    - Helps organize the hierarchy view
+- Adding randomness helps make the game more interesting and unpredictable
+
+### Destroy Objects Offscreen
+- See `DestroyOffscreen.cs`
+- It's a good idea to destroy objects once they go offscreen
+- Saves memory and resources
+- However, it's more efficient to reuse game objects
+    - This is the concept of object pooling
