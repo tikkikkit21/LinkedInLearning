@@ -37,7 +37,7 @@ https://www.linkedin.com/learning/unity-5-2d-essential-training
 - This can result in exponential savings the more assets and sprites we have
 
 ### Pixel Perfect Camera
-See `PixelPerfectCamera.cs`
+- See `PixelPerfectCamera.cs`
 - Recall that we want to set 1 grid square = 1 pixel
 - This can result in different zoom levels based on device screen size and
   resolution
@@ -139,3 +139,41 @@ See `PixelPerfectCamera.cs`
 - Saves memory and resources
 - However, it's more efficient to reuse game objects
     - This is the concept of object pooling
+
+## Object Pooling
+- See `GameObjectUtil.cs`
+- Creating and destroying objects is wasteful
+- We want to recycle objects through reconfiguration
+- We can use a util script to do this
+    - We create the helper methods as static
+    - That way we can call `Class.Method()` without needing to create an actual
+      instance of the class
+- We then use our util functions instead of the default `GameObject` ones
+
+### Recycling
+- See `RecycleGameObject.cs`
+- This script is used to indicate whether to recycle an object or not
+- Before we destroy and object, check if it has a recycle script
+    - If so, we shutdown instead of destroy
+
+### Build Object Pool
+- See `ObjectPool.cs`
+- An <u>object pool</u> manages the objects it creates
+    - Also manage whether objects are active or inactive
+- If we request an object to be created, the pool will first find an inactive
+  object to use
+    - If there aren't any, it'll create a new one
+- This is a dynamic pool
+    - Not all pools dynamically scale
+    - Sometimes you want a pool with fixed number of objects
+
+### Wire Up Object Pool
+- We use a dictionary to manage our prefabs
+    - We create this as a private static in `GameObjectUtil`
+- We modify the `GameObjectUtil.cs` script to utilize the pool
+
+### Make Obstacles Recyclable
+- In our `ObjectPool.cs`, we need to implement recycling
+- We use the `activeSelf` property, which indicates if it's been deactivated
+- When an object is requested, see if there's an inactive object available first
+    - Otherwise, we create a new one

@@ -24,10 +24,9 @@ public class Spawner : MonoBehaviour
         if (active)
         {
             var newTransform = transform;
-            Instantiate(
+            GameObjectUtil.Instantiate(
                 prefabs[UnityEngine.Random.Range(0, prefabs.Length)],
-                newTransform.position,
-                Quaternion.identity
+                newTransform.position
             );
             ResetDelay();
         }

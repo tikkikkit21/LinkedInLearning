@@ -52,6 +52,6 @@ public class Dest : MonoBehaviour
     public void OnOutOfBounds()
     {
         offscreen = false;
-        Destroy(gameObject);
+        GameObjectUtil.Destroy(gameObject);
     }
 }
