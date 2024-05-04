@@ -201,3 +201,18 @@ https://www.linkedin.com/learning/unity-5-2d-essential-training
     collider.size = renderer.bounds.size;
     ```
 - We'll also need to adjust the offset
+    ```c#
+    public Vector2 colliderOffset = Vector2.zero;
+
+    public void Restart()
+    {
+        // ...
+        var collider = GetComponent<BoxCollider2D>();
+        var size = renderer.bounds.size;
+        size.y += colliderOffset.y;
+        collider.size = size;
+        collider.offset = new Vector2(-colliderOffset.x, collider.size.y / 2 - colliderOffset.y);
+    }
+    ```
+// note: go back and add code snippets
+## Creating the Player
