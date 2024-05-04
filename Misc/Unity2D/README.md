@@ -177,3 +177,27 @@ https://www.linkedin.com/learning/unity-5-2d-essential-training
 - We use the `activeSelf` property, which indicates if it's been deactivated
 - When an object is requested, see if there's an inactive object available first
     - Otherwise, we create a new one
+
+### Implement Recycle in Any Script
+- We use an interface in `RecycleGameObject.cs` so other scripts can use restart/shutdown
+- When our recycle script needs to restart/shutdown, we can tell it what other
+  scripts it needs to restart/shutdown as well
+
+### Clean Up Obstacles
+- See `Obstacle.cs`
+- We will now recycle obstacle objects to display different sprites
+- Our script implements the `IRecycle` interface
+    - This means we *have to* implement `Restart()` and `Shutdown()`
+- Note that we don't use lifecycle methods (`Awake`, `Start`, etc.)
+    - We rely on `IRecycle`'s lifecycle methods
+- A tip in unity is to use the lock icon in the *Inspector*
+    - This allows us to lock in the particular view
+    - We can navigate to other objects without the inspector changing
+
+### Resize Box Colliders
+- In our `Obstacle.cs` script, we can resize the collider to sprite size
+    ```c#
+    var collider = GetComponent<BoxCollider2D>();
+    collider.size = renderer.bounds.size;
+    ```
+- We'll also need to adjust the offset
