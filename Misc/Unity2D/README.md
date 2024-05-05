@@ -216,3 +216,69 @@ https://www.linkedin.com/learning/unity-5-2d-essential-training
     ```
 // note: go back and add code snippets
 ## Creating the Player
+### Build the Player
+- If we select multiple sprites from the sprite sheets and drag onto the scene,
+  the game will automatically create an animation for us
+- Put these in an `Assets/Animations` folder
+- Add a *BoxCollider2D* and *RigidBody2D* to the player component
+    - Box collider will need to be resized to the main body
+    - Set gravity of rigid body to 60
+- We'll also need to add a *BoxCollider2D* to the floor
+    - This creates the actual gravity effect
+    - Prevents player from sinking to the ground
+
+### Detect When Player is Standing
+- See `InputState.cs`
+- We use this script to detect when a player is standing on the floor
+    - Helps with jump logic later
+
+### Make Player Jump
+- See `Jump.cs`
+- Good practice to break down actions into their own individual little script
+    - More reusable and easier to debug
+
+### Add Idle Animation
+- To create a new animation, we can use Unity's animation windows
+    - `Window > Animation > Animation`
+    - `Window > Animation > Animator`
+- With the panel open, clicking on the player will reveal the animation states
+    - *Entry*: beginning of the animation
+    - *PlayerRunAnimation*: this is the animation we created
+    - *Any State*: transitions between states regardless of where we came from
+- In the *Animation* panel, we can click the animation dropdown to create a new
+  clip
+- We can change the FPS of the animation via `Samples` property
+    - May need to click triple dot to show it
+- After configuring the animation, we can add frames to it
+    - Drag sprite skins onto the timeline
+- We can manage state transitions in the *Animator* tab
+    - Start by right clicking *Any State* to make a transition
+    - This creates an arrow you can use to click on other animations
+- We'll also need to add a parameter that indicates which animation to use
+    - Go to the *Parameters* subtab in the animator
+    - Create a new boolean parameter
+- Then click on a transition, which will bring up the *Inspector* window
+    - Scroll down to `Conditions` and add one
+    - We can use the boolean parameter to indicate which animation to use
+- A couple more things to change
+    - Set transition duration to 0 for instant transition
+    - Disable "can transition to self" 
+- If we run the game, we can manually check/uncheck the parameter to switch
+  between animations
+
+### Player Animation Manager
+- See `PlayerAnimationManager.cs`
+- This script automatically toggles the animation
+- We've been using an MVC model with our scripts
+    - `InputState.cs` is the model
+    - `Jump.cs` is the controller
+    - `PlayerAnimationManager.cs` is the view
+
+### Recycle the Player
+- First change the player to a prefab
+    - Drag player from hierarchy into `Prefab` folder
+- Add `DestroyOffscreen` and `RecycleGameObject` scripts
+- Note that working with a Prefab is different than an instance
+    - Changes to a prefab affects all existing instances, both current and future
+    - Changing an instance only changes that instance
+    - Changes to instance overrides changes to prefab
