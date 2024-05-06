@@ -6,6 +6,7 @@ public class Dest : MonoBehaviour
 {
     // how far away object must be offscreen before destroyed
     public float offset = 16f;
+
     // private helper variables
     private bool offscreen;
     private float offScreenX = 0;
@@ -18,25 +19,27 @@ public class Dest : MonoBehaviour
 
     void Start()
     {
-        offScreenX = (Screen.width / PixelPerfectCamera.pixelsToUnits) / 2 + offset;
+        // find halfway point in screen and add an offset to it
+        var halfScreen = (Screen.width / PixelPerfectCamera.pixelsToUnits) / 2;
+        offScreenX = halfScreen + offset;
     }
 
-    // Update is called once per frame
     void Update()
     {
         var posX = transform.position.x;
         var dirX = body2d.velocity.x;
 
+        // check if x is beyond the screen on either side
         if (Mathf.Abs(posX) > offScreenX)
         {
             if (dirX < 0 && posX < -offScreenX)
             {
                 offscreen = true;
             }
-        }
-        else if (dirX > 0 && posX > offScreenX)
-        {
-            offscreen = true;
+            else if (dirX > 0 && posX > offScreenX)
+            {
+                offscreen = true;
+            }
         }
         else
         {
@@ -49,6 +52,7 @@ public class Dest : MonoBehaviour
         }
     }
 
+    // destroy an out of bounds object
     public void OnOutOfBounds()
     {
         offscreen = false;

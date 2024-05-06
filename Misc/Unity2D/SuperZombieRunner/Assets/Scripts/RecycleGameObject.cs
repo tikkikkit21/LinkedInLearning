@@ -28,6 +28,7 @@ public class RecycleGameObject : MonoBehaviour
         }
     }
 
+    // an object is being reused
     public void Restart()
     {
         gameObject.SetActive(true);
@@ -38,9 +39,9 @@ public class RecycleGameObject : MonoBehaviour
         }
     }
 
+    // "disables" the object without actually deleting it
     public void Shutdown()
     {
-        // "disables" the object without actually deleting it
         gameObject.SetActive(false);
         foreach (var component in recycleComponents)
         {

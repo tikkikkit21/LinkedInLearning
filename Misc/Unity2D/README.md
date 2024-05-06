@@ -1,8 +1,8 @@
 # Unity 5: 2D Essential Training
 https://www.linkedin.com/learning/unity-5-2d-essential-training
 
-## Sprites
-### Cutting Sprite Sheets
+## Working With Sprites
+### Cut Up Sprites
 - A <u>sprite</u> is a piece of artwork/image that's displayed on screen
 - Usually stored in the `Artwork/sprites` folder
 - <u>Sprite sheets</u> contain multiple sprites, usually of the same object
@@ -20,6 +20,9 @@ https://www.linkedin.com/learning/unity-5-2d-essential-training
     - Prevents "bleed"
     - When a sprite's edge pixels show up in another
     - Results in random lines or glitchy display
+- Things to change for sprites
+    - Set pixels per unit to 1
+    - Change filter mode to `Point`
 
 ### Optimizing Loose Sprites
 - Sometimes games can have loose sprites
@@ -56,13 +59,15 @@ https://www.linkedin.com/learning/unity-5-2d-essential-training
 - Create one with `GameObject > 3D Object > Quad`
 - Although a *Quad* is a 3D object, they're useful for 2D background textures
     - Easy to apply and scale textures
+    - Efficient and easy to use
 - A *Quad* has a `z` property that can be useful
     - Technically don't need it since we're working with 2D
     - However, it can be useful for layering with other objects
 - We need a <u>material</u> to apply texture to the quad
-    - Stored in `Assets/Textures`
+    - Stored in a `Materials` folder
 - We create one as a new *Material* file
     - In the Inspector, we can select the texture we want
+    - Use `Mobile/Particles/Alpha Blended` as the shader
     - Then drag the material/texture file onto the quad and texture will be applied
 
 ### Resizing Textures
@@ -79,7 +84,7 @@ https://www.linkedin.com/learning/unity-5-2d-essential-training
 - See `AnimatedTexture.cs`
 - We can use the offset to make it look like the background is scrolling by
     - Player is technically standing still
-    - Scrolling background makes it look like it's moving
+    - Scrolling background makes it look like our player is moving
 
 ### Emulate Parallax Scrolling
 - Can remove the *Mesh Collider* from the background *quad*
@@ -100,7 +105,7 @@ https://www.linkedin.com/learning/unity-5-2d-essential-training
       different sprite spawns flush to the floor
 - To apply physics to our obstacle, we add a component called *Rigidbody 2D*
     - Allows it to be an unmovable force
-    - Freeze rotation
+    - Set body type to *Kinematic*
     - When our player hits it, it'll be pushed off screen
 - Remember that the `z` value for position determines layering
     - The smaller it is, the nearer it is (includes negative numbers)
@@ -118,11 +123,12 @@ https://www.linkedin.com/learning/unity-5-2d-essential-training
 - We can use a script to move object across screen
 - The `FixedUpdate()` function is called a certain number of times
     - More efficient than `Update()`
-- We can set the collider's `interpolate` property to "interpolate"
+- We can set the collider's `interpolate` property to *interpolate*
     - Smooths the refresh rate on the object
     - Makes it less "jittery"
 
 ### Spawn New Obstacles
+- See `Spawner.cs`
 - A <u>spawner</u> uses a timer to create new objects in time intervals
 - Also requires a script
 - Spawners use handy dandy coroutines
@@ -132,29 +138,47 @@ https://www.linkedin.com/learning/unity-5-2d-essential-training
     - Or use empty game objects purely as "folders"
     - Helps organize the hierarchy view
 - Adding randomness helps make the game more interesting and unpredictable
+    ```c#
+    public Vector2 delayRange = new Vector2(1, 2);
+
+    // ...
+
+    void ResetDelay()
+    {
+        delay = UnityEngine.Random.Range(delayRange.x, delayRange.y);
+    }
+    ```
+    - We use `delayRange` to specify min and max values of time ranges
+    - The `ResetDelay()` function generates a new random delay time
 
 ### Destroy Objects Offscreen
 - See `DestroyOffscreen.cs`
 - It's a good idea to destroy objects once they go offscreen
 - Saves memory and resources
 - However, it's more efficient to reuse game objects
-    - This is the concept of object pooling
+    - This will be the concept of object pooling
 
 ## Object Pooling
 - See `GameObjectUtil.cs`
+    - Doesn't extend `MonoBehavior`
+    - This is just a plain C# class
 - Creating and destroying objects is wasteful
 - We want to recycle objects through reconfiguration
 - We can use a util script to do this
     - We create the helper methods as static
     - That way we can call `Class.Method()` without needing to create an actual
       instance of the class
-- We then use our util functions instead of the default `GameObject` ones
+- We then use the util functions in our scripts instead of the default
+  `GameObject` ones
+    - Ex: use `GameObjectUtil.Instantiate()` instead of plain `Instantiate()`
 
-### Recycling
+### Recycle Game Objects
 - See `RecycleGameObject.cs`
 - This script is used to indicate whether to recycle an object or not
 - Before we destroy and object, check if it has a recycle script
     - If so, we shutdown instead of destroy
+- Unity prefers composition over inheritance
+    - Everything is broken down into tiny modular scripts
 
 ### Build Object Pool
 - See `ObjectPool.cs`
@@ -171,15 +195,80 @@ https://www.linkedin.com/learning/unity-5-2d-essential-training
 - We use a dictionary to manage our prefabs
     - We create this as a private static in `GameObjectUtil`
 - We modify the `GameObjectUtil.cs` script to utilize the pool
+    ```c#
+    private static Dictionary<RecycleGameObject, ObjectPool> pools = new Dictionary<RecycleGameObject, ObjectPool>();
+    ```
+    - We create a dictionary to manage the objects in our pool
+    - It's static since we only need 1
+- We then create a helper function to find objects to use
+    ```c#
+    private static ObjectPool GetObjectPool(RecycleGameObject reference)
+    {
+        ObjectPool pool;
+        if (pools.ContainsKey(reference))
+        {
+            pool = pools[reference];
+        }
+        else
+        {
+            var poolContainer = new GameObject(reference.gameObject.name + "ObjectPool");
+            pool = poolContainer.AddComponent<ObjectPool>();
+            pool.prefab = reference;
+            pools.Add(reference, pool);
+        }
+
+        return pool;
+    }
+    ```
+- Also modify `Instantiate()` to utilize our pool
+    ```c#
+    public static GameObject Instantiate(GameObject prefab, Vector3 pos)
+    {
+        GameObject instance;
+        var recycledScript = prefab.GetComponent<RecycleGameObject>();
+        if (recycledScript != null)
+        {
+            var pool = GetObjectPool(recycledScript);
+            instance = pool.NextObject(pos).gameObject;
+        }
+        else
+        {
+            instance = GameObject.Instantiate(prefab);
+            instance.transform.position = pos;
+        }
+
+        return instance;
+    }
+    ```
 
 ### Make Obstacles Recyclable
 - In our `ObjectPool.cs`, we need to implement recycling
-- We use the `activeSelf` property, which indicates if it's been deactivated
-- When an object is requested, see if there's an inactive object available first
+- Update the `NextObject()` function to use the pool
+    ```c#
+    foreach (var go in poolInstances)
+    {
+        if (go.gameObject.activeSelf == false)
+        {
+            instance = go;
+            instance.transform.position = pos;
+        }
+    }
+    ```
+    - We use the `activeSelf` property, which indicates if it's been deactivated
+    - When an object is requested, see if there's an inactive object available
+      first
     - Otherwise, we create a new one
 
 ### Implement Recycle in Any Script
 - We use an interface in `RecycleGameObject.cs` so other scripts can use restart/shutdown
+    ```c#
+    public interface IRecycle
+    {
+        void Restart();
+        void Shutdown();
+    }
+    ```
+- Other scripts can implement this interface
 - When our recycle script needs to restart/shutdown, we can tell it what other
   scripts it needs to restart/shutdown as well
 
@@ -214,7 +303,7 @@ https://www.linkedin.com/learning/unity-5-2d-essential-training
         collider.offset = new Vector2(-colliderOffset.x, collider.size.y / 2 - colliderOffset.y);
     }
     ```
-// note: go back and add code snippets
+
 ## Creating the Player
 ### Build the Player
 - If we select multiple sprites from the sprite sheets and drag onto the scene,

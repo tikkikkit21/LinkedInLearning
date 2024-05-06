@@ -9,14 +9,12 @@ public class AnimatedTexture : MonoBehaviour
     private Vector2 offset = Vector2.zero;
     private Material material;
 
-    // Start is called before the first frame update
     void Start()
     {
         material = GetComponent<Renderer>().material;
         offset = material.GetTextureOffset("_MainTex");
     }
 
-    // Update is called once per frame
     void Update()
     {
         // multiplying by deltaTime ensures we have a consistent speed

@@ -8,7 +8,6 @@ public class TiledBackground : MonoBehaviour
     public bool scaleHorizontally = true;
     public bool scaleVertically = true;
 
-    // Start is called before the first frame update
     void Start()
     {
         var newWidth = !scaleHorizontally
@@ -16,8 +15,8 @@ public class TiledBackground : MonoBehaviour
             : Mathf.Ceil(Screen.width / (textureSize * PixelPerfectCamera.scale));
 
         var newHeight = !scaleVertically
-        ? 1
-        : Mathf.Ceil(Screen.height / (textureSize * PixelPerfectCamera.scale));
+            ? 1
+            : Mathf.Ceil(Screen.height / (textureSize * PixelPerfectCamera.scale));
 
         transform.localScale = new Vector3(
             newWidth * textureSize,

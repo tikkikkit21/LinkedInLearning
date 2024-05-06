@@ -6,7 +6,7 @@ SpriteAtlas:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: SpriteAtlas
+  m_Name: ObstacleAtlas
   m_EditorData:
     serializedVersion: 2
     textureSettings:
@@ -74,5 +74,5 @@ SpriteAtlas:
   - couch
   - trash
   m_RenderDataMap: {}
-  m_Tag: SpriteAtlas
+  m_Tag: ObstacleAtlas
   m_IsVariant: 0

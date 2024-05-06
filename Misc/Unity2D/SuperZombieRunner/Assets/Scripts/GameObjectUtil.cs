@@ -5,9 +5,10 @@ using UnityEngine;
 public class GameObjectUtil
 {
     private static Dictionary<RecycleGameObject, ObjectPool> pools = new Dictionary<RecycleGameObject, ObjectPool>();
+
     public static GameObject Instantiate(GameObject prefab, Vector3 pos)
     {
-        GameObject instance = null;
+        GameObject instance;
 
         // check if recycled script attach
         var recycledScript = prefab.GetComponent<RecycleGameObject>();
@@ -47,7 +48,7 @@ public class GameObjectUtil
 
     private static ObjectPool GetObjectPool(RecycleGameObject reference)
     {
-        ObjectPool pool = null;
+        ObjectPool pool;
 
         // if dictionary contains associated pool, use it
         if (pools.ContainsKey(reference))
