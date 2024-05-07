@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Dest : MonoBehaviour
+public class DestroyOffscreen : MonoBehaviour
 {
     // how far away object must be offscreen before destroyed
     public float offset = 16f;
@@ -11,6 +11,10 @@ public class Dest : MonoBehaviour
     private bool offscreen;
     private float offScreenX = 0;
     private Rigidbody2D body2d;
+
+    // checking player death
+    public delegate void OnDestroy();
+    public event OnDestroy DestroyCallback;
 
     void Awake()
     {
@@ -57,5 +61,11 @@ public class Dest : MonoBehaviour
     {
         offscreen = false;
         GameObjectUtil.Destroy(gameObject);
+
+        // utilize provided delegate
+        if (DestroyCallback != null)
+        {
+            DestroyCallback();
+        }
     }
 }

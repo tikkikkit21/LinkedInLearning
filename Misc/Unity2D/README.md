@@ -371,3 +371,93 @@ https://www.linkedin.com/learning/unity-5-2d-essential-training
     - Changes to a prefab affects all existing instances, both current and future
     - Changing an instance only changes that instance
     - Changes to instance overrides changes to prefab
+
+## Setting Up The Game
+### Start The Game
+- See `GameManager.cs`
+- This script has 2 functions
+    - Ensure floor is on the bottom
+    - Disable spawner when game first opens
+- We also need to create an empty GameObject as the "GameManager"
+    - Attach the script to it
+
+### Add The Player
+- We modify the `GameManager.cs` script
+- Add a function that can be called for each new game session
+    ```c#
+    void ResetGame()
+    {
+        spawner.active = true;
+        player = GameObjectUtil.Instantiate(
+            playerPrefab,
+            new Vector3(
+                0,
+                (Screen.height / PixelPerfectCamera.pixelsToUnits) / 2,
+                0
+            )
+        );
+    }
+    ```
+- We can then call this at the end of `Start()`
+- Our script will now create a new player prefab at the start of the game
+- Will also start the spawner
+
+### End the Game
+- We can update the `DestroyOffscreen` script to handle player death
+- First we add a delegate and event as variables
+    ```c#
+    public delegate void OnDestroy();
+    public event OnDestroy DestroyCallback;
+    ```
+    - A delegate is basically a pointer to a function
+    - Allows us to pass in functions as parameters
+- We can then link it up with `GameManager.cs`
+- Deactivate spawner when player dies:
+    ```c#
+    void OnPlayerKilled()
+    {
+        spawner.active = false;
+    }
+    ```
+- Link the callback in `ResetGame()`
+    ```c#
+    var playerDestroyScript = player.GetComponent<DestroyOffscreen>();
+    playerDestroyScript.DestroyCallback += OnPlayerKilled;
+    ```
+- We also need to unlink the callback at the end of the program
+    - Otherwise GC won't properly delete it
+    - It's the same code, just with a `-=` in `OnPlayerKilled()`
+
+### Game Over Effect
+- See `TimeManager.cs`
+- One way to end the game is to stop all animations
+    - Reset each individual component's velocity to 0
+    - However, this is a lot of work
+- An easier way is to just freeze time
+    - AKA "pausing" the game
+- We add the time management script to our `GameManager` object
+    - Also need to adjust the script
+    - Use `GetComponent` to find the manager, and then freeze time when player
+      dies
+        ```c#
+        timeManager.ManipulateTime(0, 5.5f);
+        ```
+- Result effect is a slow down of time before it stops
+
+### Restart the Game
+- We add a flag `gameStarted` to indicate when the game is on or not
+    - Update `ResetGame()` and `OnPlayerKilled()` to update the flag accordingly
+- We also an `Update()` method that resumes the game when we click anywhere
+    ```c#
+    void Update()
+    {
+        if (!gameStarted && Time.timeScale == 0)
+        {
+            if (Input.anyKeyDown)
+            {
+                timeManager.ManipulateTime(1, 1f);
+                ResetGame();
+            }
+        }
+    }
+    ```
