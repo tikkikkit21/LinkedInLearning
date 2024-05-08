@@ -461,3 +461,153 @@ https://www.linkedin.com/learning/unity-5-2d-essential-training
         }
     }
     ```
+
+## Polishing the Game
+### Add Text
+- We can import custom fonts in a `Fonts` folder
+    - Has `.ttf` file extension
+    - Note: use `Window > TextMesh Pro > Font Asset Creator` to convert the file
+      into a useable font
+- We can add a text component with `GameObject > UI > Text`
+- *Text* objects are created inside a *Canvas* object
+    - The canvas provides boundaries for UI elements
+- We also have an *EventSystem* object
+    - This handles input with UI elements
+- A few changes we need to make in our canvas
+    - Set render mode to `Screen Space - Camera` to position it with camera
+    - Enable pixel perfect
+    - Assign render camera to our scene's main camera
+- Also need to adjust the canvas scaler properties
+    - Scale with screen size
+    - Change resolution to our PixelPerfectCamera resolutions
+    - Match height (value of 1)
+    - Change pixels per unit to 1 as well
+
+### Lay Out Text
+- We can change the pivots of the text to position the text better
+    - Use the little box icon on top left
+- We can customize the text like a normal word doc
+    - Color
+    - Size
+    - Spacing
+    - Alignment
+    - Effects (ex: drop shadow)
+
+### Control Text with Code
+- We can update the `GameManager.cs` script to make the text blink
+- First, we add some variables and set the text
+    ```c#
+    using UnityEngine.UI;
+    continueText.text = "PRESS ANY BUTTON TO START";
+    public class GameManager : MonoBehaviour
+    {
+        public TMP_Text continueText;
+        private bool blink;
+        private float blinkTime = 0f;
+    }
+    ```
+    - Note that we use `TMP_Text`
+    - TMP is TextMesh Pro
+    - Older versions are plain `Text`
+- We also want to update the text properties based on game states
+    ```c#
+    void Start()
+    {
+        continueText.text = "PRESS ANY BUTTON TO START";
+    }
+
+    void Update()
+    {
+        if (!gameStarted)
+        {
+            blinkTime++;
+            if (blinkTime % 40 == 0)
+            {
+                blink = !blink;
+            }
+            continueText.canvasRenderer.SetAlpha(blink ? 0 : 1);
+        }
+    }
+
+    void OnPlayerKilled()
+    {
+        continueText.text = "PRESS ANY BUTTON TO RESTART";
+    }
+
+    void ResetGame()
+    {
+        continueText.canvasRenderer.SetAlpha(0);
+    }
+    ```
+
+### Display the Score
+- We create another text element
+    - Stays in the same canvas as continue text
+- Change the pivot and anchor to upper left
+
+### Connect Score with Game Manager
+- We update the game manager script to track best times
+    ```c#
+    public TMP_Text scoreText;
+    private float timeElapsed = 0f;
+    private float bestTime = 0f;
+    ```
+- We create a helper function to format time into a nice string
+    ```c#
+    string FormatTime(float value)
+    {
+        TimeSpan time = TimeSpan.FromSeconds(value);
+        return string.Format("{0:D2}:{1:D2}", time.Minutes, time.Seconds);
+    }
+    ```
+    - Will need to import `using System;`
+- Then we update the `Update()` function
+    ```c#
+    if (!gameStarted)
+    {
+        // ...
+        scoreText.text = "TIME: " + FormatTime(timeElapsed) + "\nBest: " + FormatTime(bestTime);
+    }
+    else
+    {
+        timeElapsed += Time.deltaTime;
+        scoreText.text = "TIME: " + FormatTime(timeElapsed);
+    }
+    ```
+    - When game is running, we only display elapsed time
+    - Otherwise, we display both elapsed and best times
+- Also need to reset elapsed time in `ResetGame()` to 0
+    ```c#
+    timeElapsed = 0f;
+    ```
+
+### Save High Score
+- There's a useful class called `PlayerPrefs`
+    - Stores user data that persists across game sessions
+    - Similar to cookies in web browsers
+- In `OnPlayerKilled()`, add a simple check to see if elapsed time is better
+  than best time
+- We also use the `PlayerPrefs` class to load/save scores on 
+  `Start()`/`OnPlayerKilled()` respectively
+    ```c#
+    PlayerPrefs.SetFloat("BestTime", bestTime);
+    bestTime = PlayerPrefs.GetFloat("BestTime");
+    ```
+- We can also add a feature that a new high score results in a differenct color
+- Update the score text code:
+    ```c#
+    var textColor = beatBestTime ? "#FF0" : "#FFF";
+    scoreText.text = "TIME: " + FormatTime(timeElapsed) + "\n<color=" + textColor + ">BEST: " + FormatTime(bestTime) + "</color>";
+    ```
+
+### Add Lighting Effects
+- We can add a lighting effect using an *Image* component
+    - `GameObject > UI > Image`
+- We set the image anchor properties to *Stretch*
+    - Bottom right option
+    - We then set all 4 corners to 0
+- Then we assign our custom image to the source image property
+- The order matters in the hierarchy
+    - The higher up, the earlier it's placed
+    - We put the lighting effect on top of the text
+    - This means the text ends up on top of the lighting and won't get affected
