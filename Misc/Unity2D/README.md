@@ -622,3 +622,24 @@ https://www.linkedin.com/learning/unity-5-2d-essential-training
     - Destroy offscreen script
     - Recycle game object script
     - Velocity script
+
+## Publishing
+- Main reason to make a game is to publish so others can play
+- Go to `File > Build Settings`
+- First add scenes that you want to include
+    - This should be added by default
+- Start with *Windows, Mac, Linux* as the platform for building
+- Then click *Build And Run*
+- Some good practices
+    - Make a `Builds` builder
+    - Create subfolders for the platform that the build is
+- There are a lot of customizable settings for your game
+    - Icons
+    - Game name
+    - Resolution
+- Different platforms too
+    - Webs
+    - Mobile
+    - PC
+    - Xbox
+    - ...and more
