@@ -611,3 +611,14 @@ https://www.linkedin.com/learning/unity-5-2d-essential-training
     - The higher up, the earlier it's placed
     - We put the lighting effect on top of the text
     - This means the text ends up on top of the lighting and won't get affected
+
+## Creating More Obstacles
+- With the way our project is set up, it's super easy to add more obstacles
+    - We already have all our modular scripts set up
+    - Just need to add them to each new addition
+- Things to add:
+    - BoxCollider 2D
+    - RigidBody 2D
+    - Destroy offscreen script
+    - Recycle game object script
+    - Velocity script
