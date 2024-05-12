@@ -141,7 +141,7 @@ print(clf.score(x_test, y_test))
 - `scaler.fit` should only be on training set
 - `scaler.transform` is both training and test set
 - A good metric to check is the confusion matrix:<br>
-![confusion matrix](confusion.png)
+![confusion matrix](images/confusion.png)
     - Top left says that it predicted versicolor correctly 10 times
     - Bottom right says the same for virginica
     - Top right says that it predicted virginica when it was actually 
@@ -242,7 +242,7 @@ tree.plot_tree(clf)
 plt.show()
 ```
 
-![basic tree](tree.png)
+![basic tree](images/tree.png)
 
 ```python
 # some visual improvements
@@ -258,7 +258,7 @@ cn = ['setosa', 'versicolor', 'virginica']
 tree.plot_tree(clf, feature_names=fn, class_names=cn, filled=True)
 ```
 
-![better tree](tree2.png)
+![better tree](images/tree2.png)
 
 ### Bagged Trees
 - A weakness of decision trees is that they tend to overfit on data
@@ -503,7 +503,7 @@ clf.fit(x_train, y_train)
 - Pipelines in `scikit-learn` helps to connect different algorithms together
     - In a clean and organized way
 - You can also visualize it to see the different steps the pipeline takes<br>
-![pipeline](pipeline.png)
+![pipeline](images/pipeline.png)
 
 ```Python
 from sklearn.pipeline import Pipeline

@@ -3,3 +3,16 @@ __pycache__
 .env
 .R*
 .vscode
+
+# Unity
+Library
+obj
+Temp
+Logs
+UserSettings
+Builds
+.vs
+.vsconfig
+*.csproj
+*.unityproj
+*.sln
