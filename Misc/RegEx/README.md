@@ -84,3 +84,11 @@ https://www.linkedin.com/learning/learning-regular-expressions-15586553/
 - You can escape escape characters with a double backslash `\\`
 - Escaping is only for metacharacters
     - Don't escape literals
+
+### Other Special Characters
+- Spaces are just a normal space character
+- Tabs are `\t`
+- Line returns are `\r`, `\n`, or `\r\n`
+    - `\r` is line return
+    - `\n` is new line
+    - Pretty much the same, just depends on OS
