@@ -92,3 +92,74 @@ https://www.linkedin.com/learning/learning-regular-expressions-15586553/
     - `\r` is line return
     - `\n` is new line
     - Pretty much the same, just depends on OS
+
+## Character Sets
+### Define a Character Set
+- A character set is like a more limited wildcard
+- Denoted with square brackets `[]`
+- Any letter in the set can be matched
+    - But only 1 letter
+- Order of characters don't matter
+- Case sensitive
+- Examples
+    - `/[aeiou]/` matches any vowel
+    - `/gr[ea]y/` matches "gray" or "grey"
+    - `/gr[ea]t/` doesn't match "great"
+- Not restricted to only letters
+    - Can also use numbers or punctuation
+
+### Character Ranges
+- Character ranges are shorthand for character sets for:
+    - Numbers
+    - Lowercase letters
+    - Uppercase letters
+- Uses the hyphen `-` to include all ranges between the 2 characters
+- Note that its special only within a character set
+    - Outside of a set, it's treated as a literal hyphen
+- Examples:
+    - `/[0-9]/` matches any number
+    - `/[A-Za-z]/` matches any letter, regardless of case
+- Remember that it's a *character* range
+    - Ex: `/[50-99]/` won't find numbers from 50 to 99
+
+### Negative Character Sets
+- The carat `^` negates an entire character set
+    - Everything within the brackets
+    - Even if there's multiple ranges like `/[^A-Za-z]/`
+- Not any one of the several characters
+- Ex: `/[^aeiou]/` matches constants only
+- Remember that it's still looking for a character
+    - `/see[^mn]/` won't find "see"
+
+### Metacharacters Inside Character Sets
+- By default, most metacharacters are automatically escaped in character sets
+    - Ex: `/h[a.]t/` matches "hat" and "h.t", but not "hot"
+- Some exceptions that need to be explicitly escaped
+    - `]` because it ends the set
+    - `-` because it's used for ranges
+    - `^` because it's used for negation
+    - `\` because it's the escape character
+
+### Shorthand Character Sets
+| Shorthand | Meaning            | Equivalent      |
+| --------- | ------------------ | --------------- |
+| `\d`      | digit              | `[0-9]`         |
+| `\w`      | word character     | `[a-zA-Z0-9_]`  |
+| `\s`      | whitespace         | `[\t\r\n]`      |
+| `\D`      | not digit          | `^[0-9]`        |
+| `\W`      | not word character | `^[a-zA-Z0-9_]` |
+| `\S`      | not whitespace     | `^[\t\r\n]`     |
+
+- These shorthand symbols are useful for common character sets/ranges
+- Not all engines will support these
+    - Most should though
+    - Only older engines shouldn't support
+- Note that `\w` includes the underscore `_`
+    - "Word character" is more in the programming sense
+    - Underscores are common when it comes to code and filenames
+    - Hyphen is not included, even though it's a common character we see in
+      normal text (like a book)
+    - We can use `/[\w\-]/` to include hyphen
+- `/[^\d\s/]` is not the same as `[\D\S]`
+    - First is not digit or space character
+    - Second is either not digit or not space
