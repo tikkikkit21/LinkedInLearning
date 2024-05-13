@@ -307,3 +307,59 @@ https://www.linkedin.com/learning/learning-regular-expressions-15586553/
     - There's actually 2 boundaries, before and after the space
 - `/\B\w+\B/` only finds "hi" and "es" in "This is a test."
 - Word boundaries are more efficient since they're more specific
+
+## Capturing Groups & Backreferences
+### Captures & Backreferences
+- Grouped expressions are always captured by default
+    - Matched data in groups are stored for later use
+- Ex: `/a(ppl)e/` matches "apple", but "ppl" is saved in memory
+- Most engines support `\1` to `\9` to reference stored data
+    - Some web-based ones use `$1` to `$9` instead
+- Can be used inside the same expression or after the match
+- Can't be used inside character classes
+- Examples
+    - `/(apples) to \1/` matches "apples to apples
+    - `/<(i|em)>.+?<\/\1>/` matches "&lt;i>sup&lt;/i>" or "&lt;em>sup&lt;/em>"
+
+### Backreferences to Optional References
+- Backreferences can also be used with optional references
+- Remember that the `?` means optional
+    - `/a?typical/` matches "typical" and "atypical"
+- Zero-width matches are still captured as empty strings
+- Examples
+    - `/(A?)B/` matches "AB" and captures "A"
+    - `/(A?)B/` matches "B" and captures ""
+    - `/a?typical/` matches "typical" and captures ""
+- We can still use this empty capture in backreferences
+    - `/(a?)typical & \1political/` matches "atypical & apolitical"
+    - `/(a?)typical & \1political/` matches "typical & political"
+- Things are different if the group itself is optional
+    - `/(A)?B/` matches "AB" and captures "A"
+    - `/(A)?B/` matches "B" but captures nothing
+- Empty captures cannot be used in backreferencing
+    - Note that JS engines are an exception
+    - They do support empty captures
+- A workaround is to group the optional group with `((group)?)`
+
+### Find/Replace with Backreferences
+- Backreferences are also allowed outside of the original expression
+    - As long as the engine/program allows it
+- Suppose we have a list of names like "First Last"
+    - We want to change it to "Last, First"
+    - We can find `/^(.+) (.+)$/` and replace with `/\2, \1/`
+- Advice on setting up the process
+    - Create a normal regex
+    - First make sure it matches the data you want
+    - Add the capturing groups
+    - Write replacement string with backreferences
+
+### Non-Capturing Group Expressions
+- Non-capturing groups prevents auto capturing of a group expression
+    - Useful for groups that we don't need to backreference
+    - Frees up storage for other captures
+    - Can improve speed
+- Supported by most modern engines
+    - Unix doesn't
+- We use `?:` inside the group to disable capturing
+    - `(A)(B)` captures "A" and "B"
+    - `(?:A)(B)` only captures "B"
