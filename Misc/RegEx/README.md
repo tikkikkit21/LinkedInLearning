@@ -363,3 +363,56 @@ https://www.linkedin.com/learning/learning-regular-expressions-15586553/
 - We use `?:` inside the group to disable capturing
     - `(A)(B)` captures "A" and "B"
     - `(?:A)(B)` only captures "B"
+
+## Lookaround Assertions
+### Positive Lookahead Assertions
+- Lookahead assertions adds an extra condition after a match has been found
+    - Engine needs to "look ahead" after current position
+- A little different than groups
+    - The group isn't included in match
+    - Won't be captured
+- We use `?=` for positive lookahead
+    - `/sea/` has matches in "seaside" and "seashore"
+    - `/(?=seashore)sea/` has only matches in "seashore"
+- Properties
+    - Only return true/false
+    - Don't change the engine's cursor position
+    - Examines the same characters in the expression
+- Useful for adding patterns to the regex without actually matching them
+    - Ex: checking for words that end in punctuation without including the
+      punctuation in the match
+- Lookarounds can be placed anywhere in the regex
+    - Doesn't have to be in the beginning
+
+### Negative Lookahead Assertions
+- We use `?!` for negative lookahead
+- Examples
+    - `/\b(?!re)\w+\b/` matches words not starting with "re"
+    - `/\b\w+(?!ed)\b/` matches words not ending with "ed"
+- It's not an exact opposite to positives
+    - Allows us reject expressions rather than matching them
+
+### Lookbehind Assertions
+- Similar to lookahead assertions
+    - Groups aren't included in match or captured
+- True if a grouped expression is or is not behind the current position
+- JS can get weird with them
+- We can add a `<` to reverse positive/negative lookaheads
+    - `?<=` is positive lookbehind assertion
+    - `?<!` is negative lookbehind assertion
+- Ex: `/(?<=base)ball/` matches "ball" in "baseball" but not "football"
+- When using alternations with assertions, they have to be the same width
+    - Most engines will reject regex if there's variable width
+    - It's just to make their lives easier
+- Not just for alternations
+    - Optional characters
+    - Variable repetition
+
+### Multiple Lookaround Assertions
+- Ex: `/\b(?=\w{6,1})sea(?!shore)\w+\b/`
+    - Matches word starting with "sea"
+    - Asserts 6 or more characters
+    - Asserts not "seashore"
+- The more assertions you add, the slower the search will be
+    - Good idea to add anchors to reduce searching
+    - Put simplest/fastest assertions first
