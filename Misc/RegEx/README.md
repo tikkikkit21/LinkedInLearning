@@ -224,3 +224,42 @@ https://www.linkedin.com/learning/learning-regular-expressions-15586553/
     - `.*?` matches "Page "
     - `[0-9]+` matches "266"
 - Useful for matching shorter possible strings
+
+## Grouping & Alternation
+### Grouping Metacharacters
+- We can use parentheses `()` to group parts of the expression
+- Allows us to do certain things
+    - Apply repetition to a group
+    - Create group of alternating expressions
+    - Use groups for matching/replacing
+- Examples:
+    - `/(abc)+/` matches "abc" and "abcabcabcabc"
+    - `/(in)?dependent/` matches "dependent" and "independent"
+- When using grouping, engines know which text matched which group
+    - Some engines store these in variables like `$1`, `$2`, etc.
+    - Others might use backslashes like `\1`
+    - We can use this for replacing
+- Ex: `/(\d{3})-(\d{3}-\d{4})/` with a phone number "111-222-3333"
+    - We can replace it with `/($1) $2/`
+    - Results in "(111) 222-3333"
+
+### Alternation Metacharacters
+- The pipe `|` is used for alternation
+    - Basically an OR operator
+    - Needs to match either left or right
+    - Left takes precedence
+- Examples
+    - `/apple|orange/` matches "apple" or "orange"
+    - `/apple(juice|sauce)` matches "applejuice" or "applesauce"
+        - Not the same as `/applejuice|sauce/`
+    - `/w(ei|ie)rd/` can detect both "weird" and "wierd"
+    - `/(AA|BB|CC|DD){4}/` matches "AABBAACC", "AADDBBCC", "AAAAAAAA"
+
+### Efficiency When Using Alternation
+- The order of the alternation doesn't matter
+- Remember that engines start from beginning of doc and finds something that
+  matches anything in the pattern
+- `/(def|abc)/` matches "abc" in "abcdef"
+- Good tip is to put the simplest or most efficient expression first
+    - Most specific ones or small character sets
+    - Wildcard should be towards the end
