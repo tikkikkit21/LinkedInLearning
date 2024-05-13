@@ -163,3 +163,64 @@ https://www.linkedin.com/learning/learning-regular-expressions-15586553/
 - `/[^\d\s/]` is not the same as `[\D\S]`
     - First is not digit or space character
     - Second is either not digit or not space
+
+## Repetition
+### Repetition Metacharacters
+- There are 3 special metacharacters for repeated patterns
+    - `*` 0 or more times
+    - `+` 1 or more times
+    - `?` 0 or 1 time
+- Examples
+    - `/Good .+/` matches "Good morning...", "Good evening...", "Good day..."
+    - `/[a-z]+ed/` matches any word ending in "ed"
+- Comparison chart:
+
+| RegEx       | "apple" | "apples" | "applesssss" |
+| ----------- | ------- | -------- | ------------ |
+| `/apples*/` | ✅       | ✅        | ✅            |
+| `/apples+/` | ❌       | ✅        | ✅            |
+| `/apples?/` | ✅       | ✅        | ❌            |
+
+- Sometimes `*` and `+` can be used interchangeable
+    - `/\d\d\d+/`
+    - `/\d\d\d\d*/`
+    - These 2 patterns are the same: 3 numbers or more
+
+### Quantified Repetition
+- Sometimes, we want to repeat a specific amount
+- We can use `{min,max}` with numbers to indicate number of repetitions
+    - Specifies the min and max amount of reptitions allowed
+- Use cases
+    - `/\d{4,8}/` 4-8 digits
+    - `/\d{4}/` exactly 4 digits
+    - `/\d{4,}/` at least 4 digits
+- Equivalent cases
+    - `/\d{0,}/` is the same as `/\d*/` 
+    - `/\d{1,}/` is the same as `/\d+/` 
+
+### Greedy Expressions
+- Suppose we have a string `"123abc456def789"`
+- Now we have a regex `/\d+\w+\d+/`
+    - Looks for some numbers, some word characters, then some more numbers
+- What will be returned?
+    - "123abc456"
+    - "123abc456def789"
+    - Both strings fit the regex pattern
+- Standard repetition quantifiers are greedy
+    - Looks for the longest possible string
+- However, it doesn't always return the longest possible string
+- Each sub-expression tries to match as much as possible before handing it off
+  to the next sub-expression
+- Ex: `/.*[0-9]+/` with "Page 266"
+    - `.*` will match "Page 26"
+    - `[0-9]+` only matches the "6" at the end
+
+### Lazy Expressions
+- When `?` is applied to a quantifier, it changes it to being lazy
+    - `*?`, `+?`, `{min,max}?`, `??`
+- Makes it the opposite of greedy
+    - Tries to match as little as possible before moving on
+- Ex: `/.*?[0-9]+/` with "Page 266"
+    - `.*?` matches "Page "
+    - `[0-9]+` matches "266"
+- Useful for matching shorter possible strings
