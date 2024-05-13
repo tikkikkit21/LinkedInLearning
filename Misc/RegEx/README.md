@@ -263,3 +263,47 @@ https://www.linkedin.com/learning/learning-regular-expressions-15586553/
 - Good tip is to put the simplest or most efficient expression first
     - Most specific ones or small character sets
     - Wildcard should be towards the end
+
+## Anchors
+### Start & End Anchors
+| Symbol | Meaning                            |
+| ------ | ---------------------------------- |
+| `^`    | Start of string/line               |
+| `$`    | End of string/line                 |
+| `\A`   | Start of string, never end of line |
+| `\Z`   | End of string, never end of line   |
+
+- First 2 are line by line, last 2 are for the whole doc
+- These anchors reference a *position*, not an actual character
+    - Don't have widths
+- `/^apple/` only matches "apple" if it's the first substring that appears
+    - Matches "applesaregood"
+    - Won't match "aslkdjapple"
+- To match an exact string, we can do `/^string$/`
+
+### Line Breaks & Multiline Mode
+- Remember the `m` flag for multiline mode
+- Regex has 2 modes that affect how anchors work
+    - Single-line (default)
+        - `^` and `$` don't match at line breaks
+        - `\A` and `\Z` don't match at line breaks
+    - Multi-line
+        - `^` and `$` will match at line breaks
+        - `\A` and `\Z` don't match at line breaks 
+- Multiline is newer so older engines might not support it yet
+
+### Word Boundaries
+| Symbol | Meaning                           |
+| ------ | --------------------------------- |
+| `\b`   | Word boundary (start/end of word) |
+| `\B`   | Not a word boundary               |
+
+- Word boundaries are also positional, not an actual character
+- Represent shifts between word characters and non-word characters
+    - Remember that word characters are `/[A-Za-z0-9_]/`
+- `/\b\w+\b/` finds each individual word in "This is a test." as well as the
+  period
+- Be careful not to think that spaces themselves are word boundaries
+    - There's actually 2 boundaries, before and after the space
+- `/\B\w+\B/` only finds "hi" and "es" in "This is a test."
+- Word boundaries are more efficient since they're more specific
