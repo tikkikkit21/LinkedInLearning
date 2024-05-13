@@ -1,0 +1,24 @@
+c++:
+- changed-files:
+  - any-glob-to-any-file: ['C++/**']
+git:
+- changed-files:
+  - any-glob-to-any-file: ['Git/**']
+html:
+- changed-files:
+  - any-glob-to-any-file: ['HTML/**']
+javascript:
+- changed-files:
+  - any-glob-to-any-file: ['JavaScript/**']
+linux:
+- changed-files:
+  - any-glob-to-any-file: ['Linux/**']
+misc:
+- changed-files:
+  - any-glob-to-any-file: ['Misc/**']
+python:
+- changed-files:
+  - any-glob-to-any-file: ['Python/**']
+r:
+- changed-files:
+  - any-glob-to-any-file: ['R/**']
