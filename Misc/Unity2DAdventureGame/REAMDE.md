@@ -29,13 +29,13 @@ https://www.linkedin.com/learning/unity-5-2d-building-an-adventure-game/
 
 ## Working With Animations
 ### Build Animations
-- To create an animation, select multiple sprite frames at once and drag them onto the scene
+- To create an <u>animation</u>, select multiple sprite frames at once and drag them onto the scene
     - Prompts us to create an animation file, put it in an *Animations* folder
 - Use `Window > Animation > Animation` and `Window > Animation > Animator` for 2 panels that deal with animations
 - In the *Animator*, we can see the animation
     - Clicking on it reveals some properties
 - A second file will be created for us
-    - This is the animation controller
+    - This is the <u>animation controller</u>
     - Used for controlling animations
     - Game objects use this component side-by-side with sprite renderers
 - In the *Animation* tab, you can press play to run the animation without running the game
@@ -68,7 +68,7 @@ https://www.linkedin.com/learning/unity-5-2d-building-an-adventure-game/
     - Facilitates transitions without needing to connect every animation to each other
 - Right click on the *Any State* and click *Make Transition*
     - Link each arrow to every animation
-- To trigger animation changes, we use parameters
+- To trigger animation changes, we use <u>parameters</u>
 - In the *Animator*, there is a *Parameters* tab
     - We can create new parameters with the "+" button
     - With multiple animations, an int is a good type choice
@@ -77,3 +77,45 @@ https://www.linkedin.com/learning/unity-5-2d-building-an-adventure-game/
     - Set *Transition Duration (%)* to 0
     - Uncheck *Can Transition to Self*
     - Down in *Conditions*, click "+" and assign to a number with *Equals*
+
+## Creating a Player
+### Create a Player Prefab
+- A <u>prefab</u> is like a template for a game object
+- Create a new folder called *Prefabs*
+    - Drag game objects from the hierarchy to this folder
+    - Automatically creates a prefab
+- Some important properties:
+    - Changing source prefab (the one in the *Prefab* folder) will change all
+    - Changing a prefab game object in the scene will only affect that game object
+    - If we wanted to apply the changes to all, click *Apply* in the *Inspector*
+
+### Add Collision to Player
+- To add some physics to the player, we can add a *Rigidbody 2D*
+    - This will add things like gravity
+- Sometimes we want to change settings
+    - We can tweak settings in the game object inspector
+    - But this only affects that specific game object
+- We can make global changes with `Edit > Project Settings > Physics 2D`
+- To add collision logic, we use a *Box Collider 2D*
+    - Need to add to both player and the ground
+- There are other colliders we can use
+    - For example, the *Polygon 2D*
+    - This allows us to add colliders to non-rectangular shapes
+    - There's an "Edit Collider" button that allows us to edit the boundaries
+    - Adds more realistic collisions
+
+### Clean Up the Player
+- Box colliders are great but they can be clunky sometimes
+    - Easily gets caught on other tiles
+    - Doesn't easily account for transparency in sprite art
+- Another option is the *Circle Collider 2D*
+    - Draws a circle instead of box around the game object
+    - Good idea to freeze Z so it doesn't roll on slopes
+- We can add some more physics by creating a physics <u>material</u>
+    - Create a "Materials" folder
+    - Go to `Create > 2D > Physics Material 2D`
+    - You can modify the friction and bounciness settings
+- Drag the new material into the *Circle Collider 2D*
+- Sometimes the game object will have a stuttering effect when it's resting on an object
+    - To remedy this, go back to the global settings
+    - Change *Velocity Threshold* to 2
