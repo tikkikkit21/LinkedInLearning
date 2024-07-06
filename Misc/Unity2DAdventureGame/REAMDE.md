@@ -119,3 +119,71 @@ https://www.linkedin.com/learning/unity-5-2d-building-an-adventure-game/
 - Sometimes the game object will have a stuttering effect when it's resting on an object
     - To remedy this, go back to the global settings
     - Change *Velocity Threshold* to 2
+
+## Moving the Player
+### Move Player Left & Right
+- See `Player.cs`
+- Useful methods
+    - `SpriteRenderer.flipX` can be true/false to mirror the sprit
+        - Useful for facing opposite directions when moving
+    - `Rigidbody2D.AddForce()` adds a physics force to the game object
+
+### Enable Flying
+- We modify `Player.cs` to add some flying logic
+- Added variables for air movement
+- Ensured we can still move left/right while in the air
+- Slowed player down while in the air
+- Set *Linear Drag* to 0.3 in the player's *Rigidbody 2D*
+
+### Controller Class
+- See `PlayerController.cs`
+- We use a controller class to help clean up the logic for player movement
+    - Encapsulates the logic for mapping controller input to game actions
+    - The controller class focuses on mapping input to actions
+    - The player class focuses on responding to those actions
+- We then modify `Player.cs` to use the new controller class
+- Previous fly logic:
+    ```c#
+    if (Input.GetKey(KeyCode.RightArrow))
+    {
+        if (absVelX < maxVelocity.x)
+        {
+            forceX = standing
+            ? speed
+            : speed * airSpeedMultiplier;
+        }
+
+        renderer2d.flipX = false;
+    }
+    else if (Input.GetKey(KeyCode.LeftArrow))
+    {
+        if (absVelX < maxVelocity.x)
+        {
+            forceX = standing
+            ? -speed
+            : -speed * airSpeedMultiplier;
+        }
+
+        renderer2d.flipX = true;
+    }
+    ```
+
+- New fly logic:
+    ```c#
+    if (controller.moving.x != 0)
+    {
+        if (absVelX < maxVelocity.x)
+        {
+            var newSpeed = speed * controller.moving.x;
+            forceX = standing
+            ? newSpeed
+            : newSpeed * airSpeedMultiplier;
+            renderer2d.flipX = forceX < 0;
+        }
+    }
+    ```
+- This makes it easier to add support for new controllers such as a joystick
+    - Only need to update the controller class
+
+### Connect Animations
+- We use the `Animator` class in `Player.cs`
