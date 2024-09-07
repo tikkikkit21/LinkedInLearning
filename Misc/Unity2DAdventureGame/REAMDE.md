@@ -187,3 +187,21 @@ https://www.linkedin.com/learning/unity-5-2d-building-an-adventure-game/
 
 ### Connect Animations
 - We use the `Animator` class in `Player.cs`
+
+## Building a Level
+### Camera
+- We create `CameraFollow.cs` for a script to follow the player
+
+### Create a Simple Map
+- Create a tile map with `GameObject > Tile Map`
+- We can select some sprites for tiling in the *Inspector*
+    - Brings up a grid where we can paint tiles
+    - Adjust the `Tile Padding` to match the sprites
+- `Window > Tile Picker` brings up a pane to select the different tiles
+    - Can zoom in to make tiles bigger
+- Holding down shift when painting will allows us to paint with mouse movement
+- Create a background and foreground tilemap
+- In the foreground, select all the tiles
+    - Set `Order in Layer` to 1
+    - Add box collider 2D's
+- Set the player's layer order to 3
