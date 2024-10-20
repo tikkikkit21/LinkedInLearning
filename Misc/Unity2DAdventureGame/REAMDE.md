@@ -232,3 +232,5 @@ https://www.linkedin.com/learning/unity-5-2d-building-an-adventure-game/
 - Cool effect
 
 ### Spawn Debris
+- We attach a `RandomSprite.cs` script so there's some variety
+- Update `Explode.cs` so it'll spawn the debris on death
