@@ -205,3 +205,30 @@ https://www.linkedin.com/learning/unity-5-2d-building-an-adventure-game/
     - Set `Order in Layer` to 1
     - Add box collider 2D's
 - Set the player's layer order to 3
+
+## Interactive Objects
+### Create Collectible Objects
+- We add a box collider 2d to detect when a player has collided with it
+    - Turn on the `Is Trigger` setting so there's no actual collision
+- We create a `Collectible.cs` script to help
+    - Detects when something has collided with it
+    - Destroys on collision
+- We set the `Tag` of our player prefab to `"Player"`
+    - Tags are useful for grouping objects together
+
+### Random Sprite
+- We create `RandomSprite.cs` script to help generate a random skin for this crystal
+- To update a prefab, go to `Overrides` and then `Apply All`
+
+### Deadly Obstacles
+- Tags are useful for indicating if an obstacle is harmful
+    - Ex: `"Deadly"`
+- We can give tags to a GameObject, and then detect collisions with the player
+- See `Explode.cs`
+
+### Create Debris
+- See `Debris.cs`
+- We're creating a script so debris will slowly disappear from the scene
+- Cool effect
+
+### Spawn Debris
