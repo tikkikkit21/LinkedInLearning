@@ -7,7 +7,18 @@ public class Explode : MonoBehaviour
     public Debris debris;
     public int totalDebris = 10;
 
+    // collision with spikes
     void OnTriggerEnter2D(Collider2D target)
+    {
+        // explode only when we hit a game object with "Deadly" tag
+        if (target.gameObject.tag == "Deadly")
+        {
+            OnExplode();
+        }
+    }
+
+    // collision with alien
+    void OnCollisionEnter2D(Collision2D target)
     {
         // explode only when we hit a game object with "Deadly" tag
         if (target.gameObject.tag == "Deadly")
@@ -20,7 +31,8 @@ public class Explode : MonoBehaviour
     {
         var t = transform;
         // spawn some debris on death
-        for (int i = 0; i < totalDebris; i++) {
+        for (int i = 0; i < totalDebris; i++)
+        {
             t.TransformPoint(0, -100, 0);
 
             // create a debris object

@@ -234,3 +234,47 @@ https://www.linkedin.com/learning/unity-5-2d-building-an-adventure-game/
 ### Spawn Debris
 - We attach a `RandomSprite.cs` script so there's some variety
 - Update `Explode.cs` so it'll spawn the debris on death
+
+## Alien & AI
+### Aliens That Walk
+- See `MoveForward.cs`
+- This script lets the alien to walk forward at a set speed until it hits
+  something solid
+
+### Turnaround At Walls
+- See `LookForward.cs`
+- This script helps us to look forward and turn back once we hit a wall
+- We add a subobject to the Alien prefab with `AlienA` > `Create Empty`
+    - This subobject is what detects the actual collision
+- We also need to add a new layer to the tiles
+    - Go to 1 tile in the foreground and add a new layer
+    - Select the rest of tiles and change the layer as well
+- The layer's name needs to match the name given in
+    ```C#
+    1 << LayerMask.NameToLayer("Solid")
+    ```
+
+### Keep Aliens On Platform
+- We modify `LookForward.cs`
+- We add a `needsCollision` variable to the script
+    - If enabled, it will only turn when there's a collision
+    - Otherwise, it'll turn when the sight end is no longer with the variable
+
+### Clean Up Alien AI
+- We set the alien's label as "Deadly"
+- Add the following code to `Explode.cs`
+    ```c#
+    void OnCollisionEnter2D(Collision2D target)
+        {
+            // explode only when we hit a game object with "Deadly" tag
+            if (target.gameObject.tag == "Deadly")
+            {
+                OnExplode();
+            }
+        }
+    ```
+- We'll also need to handle logic for when aliens bump into each other
+    - Change layer of aliens to solid
+    - Add another child object called `StartSight`
+    - Move it to just in front of the circle collider
+    - Update scripts fo the sightEnd to reference that child object
