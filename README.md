@@ -1,4 +1,5 @@
 # LinkedIn Learning
+
 This repo will just store all my notes and code from the different LinkedIn
 Learning courses I've done. It'll just be a way for me to store and organize my
 notes in one place while also sort of displaying all the different things I've
@@ -14,13 +15,15 @@ it's hard to organize English notes in a code file itself via comments. I feel
 like Markdown just bridges the gap and I find it well-suited for my note-taking
 needs.
 
-Note: The `main` branch is where I store *completed* courses. If you want to see
+Note: The `main` branch is where I store _completed_ courses. If you want to see
 courses I'm currently in progress of, check out the branches!
 
 ## Course Log
+
 | Course                                               |                                                                                                             |                                                                                                     | Date Completed |
 | ---------------------------------------------------- | ----------------------------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------- | -------------- |
-| Level Up: Python                                     | [Course Link](https://www.linkedin.com/learning/level-up-python)                                            | [My Notes](https://github.com/tikkikkit21/LinkedInLearning/tree/main/Python/LevelUp)                | 12/20/2024     |
+| Unity 5: 2D Building an Adventure Game               | [Course Link](https://www.linkedin.com/learning/unity-5-2d-building-an-adventure-game)                      | [My Notes](https://github.com/tikkikkit21/LinkedInLearning/tree/main/Python/LevelUp)                | 12/20/2024     |
+| Level Up: Python                                     | [Course Link](https://www.linkedin.com/learning/level-up-python)                                            | [My Notes](https://github.com/tikkikkit21/LinkedInLearning/tree/main/Misc/Unity2DEssentialTraining) | 02/08/2025     |
 | Create a Great GitHub Profile                        | [Course Link](https://www.linkedin.com/learning/craft-a-great-github-profile/create-a-great-github-profile) |                                                                                                     | 12/19/2024     |
 | Learning Regular Expressions                         | [Course Link](https://www.linkedin.com/learning/learning-regular-expressions-15586553)                      | [My Notes](https://github.com/tikkikkit21/LinkedInLearning/tree/main/Misc/RegEx)                    | 05/13/2024     |
 | Unity5: 2D Essential Training                        | [Course Link](https://www.linkedin.com/learning/unity-5-2d-essential-training)                              | [My Notes](https://github.com/tikkikkit21/LinkedInLearning/tree/main/Misc/Unity2DEssentialTraining) | 05/08/2024     |
