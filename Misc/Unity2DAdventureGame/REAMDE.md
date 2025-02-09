@@ -278,3 +278,46 @@ https://www.linkedin.com/learning/unity-5-2d-building-an-adventure-game/
     - Add another child object called `StartSight`
     - Move it to just in front of the circle collider
     - Update scripts fo the sightEnd to reference that child object
+
+## Managing Scenes
+### Create a Splash Screen
+- Create a new scene with `File > New Scene`
+    - We'll want the one that creates a camera for us (*Basic 2D - Built In*)
+- We can change the background color like so
+    - Set *Clear Flags* to *Solid Color*
+    - Change *Background* to color as you like
+- We can set a background image by right clicking the scene and going to `GameObject > UI > Image`
+    - This creates a `Canvas` object as well for the image to sit in
+- In `Canvas` object, we want to set the *Render Mode* to *Screen Space - Camera* and enable *Pixel Perfect*
+- We also want to set the *Render Camera* to the main camera that the scene created for us
+- Change the pixels per unit to 1 in order to make it consistent
+- Set *UI Scale Mode* to *Scale With Screen Size* to make it consistent across screens
+    - Gives it a reference point based on the intended resolution
+    - We'll want to change the slider so it's completely to *Height*
+- When working with the `Image` object, we can:
+    - Set an image that we created as the source
+    - Click *Set Native Size* to automatically resize
+    - Adjust the position as needed
+- Repeat for as many screen elements as needed
+
+### Animate the Splash Screen
+- We can first create an animation by dragging multiple frames onto the screen
+    - This creates a temp animation object which we can borrow components from
+- We can then move desired components to our Canvas images
+    - Right click the *Sprite Renderer* and copy
+    - Go to `Image` object and disable the image stuff
+    - Right click and *Paste Component as New*
+- We can do the same thing with the *Animator* component
+- Also change the *Order in Layer* to 1 so it's on top
+- We can adjust the ordering of `Image`s by adding a `Canvas` component
+    - Set the order there
+- The `FloatEffect.cs` script creates subtle floating effect of the player
+    - Drag it to the player's `Image` object
+
+### Switch Between Scenes
+- Go to `File > Build Settings`
+    - Add the 2 scenes to the *Scenes in Build*
+    - Make splash scene 0 and main scene 1
+- Add a `StartGame.cs` script to start up the game
+    - Doesn't matter where you put it since it listens to mouse input
+    - Set the scene's name in the script parameter to the main scene
