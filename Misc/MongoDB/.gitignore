@@ -1,0 +1,5 @@
+mongod_only/*
+replica_set_cli/*
+replica_set/*
+
+!replica_set/*.conf
