@@ -124,7 +124,10 @@ https://www.linkedin.com/learning/mongodb-essential-training/features-of-mongodb
     - Each database has 1+ collections
     - Each collection has 1+ documents
 - We use the `use` command to switch between databases (ex: `use users`)
-- To create a new document, can do something like this `db.authors.insertOne({name: 'Tikki Cui'})`
+- To create a new document, can do something like this
+    ```js
+    db.authors.insertOne({name: 'Tikki Cui'})
+    ```
     - If successful, will return new doc with a unique object ID
 
 ### MongoDB Query Language (MQL)
@@ -158,4 +161,182 @@ https://www.linkedin.com/learning/mongodb-essential-training/features-of-mongodb
     - Wildcard
     - Geospatial
     - Hashed
-- 
+
+## CRUD Operations
+### `insertOne` and `insertMany`
+- <u>Durability</u> is a property that guarantees acknowledged writes are permanently stored in DB
+    - Even if DB is unavailable after
+    - Can be configured to be high (slower writes) or low (faster writes)
+- We use a `writeConcern` to config the durability, which is passed as a 2nd param
+    ```js
+    db.authors.insertOne(
+        {name: 'Tikki'},
+        {
+            w: 'majority',
+            j: 'true',
+            wtimeout: 100
+        }
+    )
+    ```
+    - `w` number of mongod instances to acknowledge a write before it's marked as success
+    - `j` if true, doc must be fully written to disk before success (if false, it'll be success once it reaches the journal memory)
+    - `wtimeout` how long (ms) write can block
+- `writeConcern` options
+    - If loss of data cannot happen, use `w: 'majority'`
+    - If loss of data is inconvenient but OK, use `w: 1` (success once primary finishes)
+
+### `findOne` and `find`
+- We can access nested sub-properties like this:
+    ```js
+    db.movies.findOne({'ratings.imdb': 10})
+    ```
+- We can access array elements like this:
+    ```js
+    db.movies.findOne({'genres.0': 'Musical'})
+    ```
+- For finds, we can specify a `readConcern`
+    ```js
+    db.authors.find({}).readConcern('majority')
+    ```
+    - Only see data that is majority committed
+    - Can be `local`, `available`, `majority`, `linerizable`
+- We can also speed up reads with `readPreference`
+    - `primary`, `primaryPreferred`, `secondary`, `secondaryPreferred`, and `nearest`
+    - Risks reading stale data from secondaries
+    - Fine for analytics
+    - Don't use for increasing capacity for general traffic
+
+### Comparison Operators
+- There are 8 comparison operators
+- The first 6 are pretty straightforward
+    - `$eq` ($=$)
+    - `$gt` ($$)
+    - `$gte` ($\ge$)
+    - `$lt` ($\lt$)
+    - `$lte` ($\le$)
+    - `$ne` ($\ne$)
+    - `$in` ($\in$) - field can match 1 of the provided values
+    - `$nin` ($\notin$) - field can't be any of the provided values
+- Example with `$gte`:
+    ```js
+    db.inventory.findOne({'variations.quantity': {$gt: 8}})
+    ```
+    - Finds first document where `variations.quantity` is >8
+- Example with `$in`:
+    ```js
+    db.inventory.findOne({'variations.variation': {$in: ['Blue', 'Red']}})
+    ```
+    - Finds the first doc where all the variations are either blue or red
+    - If we used `$nin`, then it finds first doc where none of the variations are blue nor red
+- Note that `$nin` and `$ne` will match properties that don't exist
+- We can use `$exists: true` to ensure property is present
+
+### Logic Operators
+- There are 4 logic operators
+    - `$and` matches all conditions
+    - `$or` matches at least 1 condition
+    - `$nor` not or
+    - `$not` negates
+- These operators take in an array of conditions except for `$not`
+- Example with `$and`:
+    ```js
+    db.inventory.findOne({$and: [{'variations.quantity': {'$ne': 0}}, {'variations.quantity': {$exists: true}}]})
+    ```
+- Example with `$not`
+    ```js
+    db.inventory.findOne({'variations.price': {$not: {$gt: 2000}}})
+    ```
+
+### Sort, Skip, Limit
+- The `.sort()` method can be chained to a `.find()` to sort the results
+    - Pass in the field
+    - Use `1` or `-1` for ascending/descending
+- Example
+    ```js
+    db.movies.find({}).sort({title: 1})
+    ```
+- The `.skip(n)` method will skip the first `n` documents from the results
+- The `.limit(n)` method will limit results to the first `n` results
+- If sorting data is a common query, then an index is a lot more efficient
+    - Otherwise, sort and limit is good
+- Note that MongoDB will always perform sort, skip, limit in that order
+    - Regardless of how the query was initially written
+
+### `updateOne` and `updateMany`
+- Update methods take 2 parameters
+    - A filter for the documents to update
+    - What to change
+- Some useful operators
+    - `$set` to create a new field
+    - `$unset` to delete a field
+    - `$inc` increase/decrease fields
+    - `$mul` multiply field 
+    - `$max` caps values at max
+    - `$min` caps values at min
+- Example with `$set` that creates a new field `message`:
+    ```js
+    db.authors.updateMany({}, {$set: {message: 'Hello'}})
+    ```
+
+### Arrays
+- We can make a normal query with array fields
+    ```js
+    db.movies.find({actors: 'Tom Holland'})
+    ```
+    - MongoDB will find all documents where `'Tom Holland'` is an element in the array `actors`
+- There are some special operators we can use as well
+    - `$all` all specified entries have to be present
+    - `$elemMatch` checks different properties for a single array element
+- Example with `$all`
+    ```js
+    db.movies.find({genres: {$all: ['Comedy', 'Drama']}})
+    ```
+- Example with `$elemMatch`
+    ```js
+    db.inventory.find({variations: {$elemMatch: {variation: 'Blue', quantity: {$gte: 8}}}})
+    ```
+- We can update arrays with
+    - `$push` add element to array
+    - `$pop` remove element from array
+    - `$addToSet` adds only if element doesn't exist
+- Example with `$push`
+    ```js
+    db.movies.updateOne({_id: ObjectId('123')}), {$push: {genres: 'Action'}}
+    ```
+- Example with `$pop`
+    ```js
+    db.movies.updateOne({_id: ObjectId('123')}), {$push: {genres: 1}}
+    ```
+    - We specify `-1` or `1` for first/last element in array
+
+### Transactions
+- Reads and writes are both atomic operations for a single document
+- However, it doesn't work for multiple documents
+    - Person A writes changes to a bunch of documents
+    - Person B reads the documents and sees some that are changed and some that aren't
+- In order to guarantee atomicity across multiple docs, use <u>multi-doc transactions</u>
+    - Returns all docs as they were when read begins
+    - Either all writes happened or they didn't
+- Sample transaction process
+    ```shell
+    > session = db.getMongo().startSession({readPreference: {mode: 'primary'}})
+    > session.startTransaction()
+    > session.getDatabase('blog').authors.updateMany({}, {$set: {message: 'Transaction'}})
+    > session.commitTransaction()
+    > session.endSession()
+    ```
+- Warnings with transactions
+    - Only use when absolutely necessary
+    - Overuse can lead to performance degradation
+    - Check data model if lots of transactions are needed
+
+### `$expr`
+- Basic queries can only compare a field value with a constant
+- `$expr` lets us compare multiple fields
+- Example
+    ```js
+    db.sales.find({$expr: {$gt: ['$price', '$cost']}})
+    ```
+    - Compares the `price` and `cost` fields
+    - Note that we have to prefix with `$` to indicate it's a field name and not a string literal
+    - Returns all documents where `price` is greater than `cost`
