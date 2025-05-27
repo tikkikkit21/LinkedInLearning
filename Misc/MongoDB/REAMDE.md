@@ -29,7 +29,7 @@ https://www.linkedin.com/learning/mongodb-essential-training/features-of-mongodb
 - Typically we never run `mongod` as our production database
     - Single process is unreliable
     - If something goes wrong the entire DB is down
-- MongoDB uses <span style="background-color: yellow">replica sets</span> to improve robustness
+- MongoDB uses <u>replica sets</u> to improve robustness
 - A replica set consists of several nodes
     - Each node maintains it's own copy of the the database
 - One node is the "primary" node that handles all write operations
@@ -112,3 +112,50 @@ https://www.linkedin.com/learning/mongodb-essential-training/features-of-mongodb
     - `db.getLogComponents()`
     - `db.adminCommand({setParameter: 1, LogLevel: 2})`
 - Stack Overflow or ChatGPT
+
+## Working With MongoDB
+### The Document Model
+- MongoDB works very well with JSON documents
+- Technically uses BSON under the hood
+    - Can store things like timestamps, longs, and images
+    - More efficient
+- General structure of a MongoDB database deployment
+    - Deployment has 1+ databases
+    - Each database has 1+ collections
+    - Each collection has 1+ documents
+- We use the `use` command to switch between databases (ex: `use users`)
+- To create a new document, can do something like this `db.authors.insertOne({name: 'Tikki Cui'})`
+    - If successful, will return new doc with a unique object ID
+
+### MongoDB Query Language (MQL)
+- MQL is a tool to access data in MongoDB
+- Also called MongoDB Query API
+- Performs CRUD (create, read, update, delete) operations
+- JavaScript-based
+
+### Indexes
+- Each query needs to scan the database and check every document
+    - Very inefficient
+    - Each separate query requires a complete sweep of the collection
+- MongoDB uses <u>indexes</u> to help organize data
+    - Indexex stores a subset of the data
+    - Contains pointers back to the full record
+    - Much more efficient
+- Drawbacks of indexes
+    - Need to be regularly maintained
+    - Trades off faster read for slower write
+- Indexes are a good idea when:
+    - You frequently query the same fields
+    - You frequently perform range-based queries
+    - Queries are the most common query patterns
+    - You have have enough RAM to store the index
+- Types of indexes
+    - Single field
+    - Partial
+    - Compound (multiple fields)
+    - Multikey
+    - Text
+    - Wildcard
+    - Geospatial
+    - Hashed
+- 
