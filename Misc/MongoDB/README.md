@@ -586,3 +586,66 @@ https://www.linkedin.com/learning/mongodb-essential-training/features-of-mongodb
         > db.currentOp(true)
         > db.adminCommand({'killOp': 1, 'op': <OP_NUMBER>})
         ```
+
+## Data Modeling
+### Relational vs Document
+- Storing JSON documents
+    - Supported by both
+    - Relational databases store them as blobs
+    - Documents have much better performance than relational
+- Storing tables
+    - Relational are optimized for tables
+    - MongoDB can work with it using `$lookup`, but not optimized
+- Have different methods of querying data
+- Things to consider
+    - Performance
+    - Ease of development
+    - Learning curve
+    - Scaling power
+
+### Data Modeling
+- Data commonly queried together should live closely together
+- There are some limits
+    - 16 MB document limit
+    - Aggregation pipelines are slower with large documents
+    - Performance is better with small documents
+- When storing 1-1 relationships, should store them together
+    - Unless document gets too big
+    - Or rarely use information
+- 1-few relationships should be stored in the same collection with nesting or arrays
+- 1-many or many-many relationships should be stored with links
+    - Use `$lookup` to combine them later
+- Keep arrays reasonably small (<100 elements)
+- Documents should not be large and flat
+
+### Flexible Schema
+- Another property of MongoDB is that it is schemaless
+- A <u>schema</u> defines structure and contents of the data in a collection
+    - Ensures documents contains fields marked "required"
+    - Field values conform to specified data types
+- However, it is possible to enforce a schema
+    ```js
+    db.runCommand({
+        collMod: 'users',
+        validator: {
+            $jsonSchema: {
+                bsonType: 'object',
+                required: ['name', 'age'],
+                properties: {
+                    name: {
+                        bsonType: 'string',
+                        description: 'must be a string and is required'
+                    },
+                    age: {
+                        bsonType: 'int',
+                        minimum: 18,
+                        description: 'must be an integer and at least 18'
+                    }
+                }
+            }
+        },
+        validationLevel: 'strict',
+        validationAction: 'error'
+    })
+    ```
+    - Setting `validationLevel: 'moderate'` only applies to newly added docs
