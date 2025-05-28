@@ -649,3 +649,125 @@ https://www.linkedin.com/learning/mongodb-essential-training/features-of-mongodb
     })
     ```
     - Setting `validationLevel: 'moderate'` only applies to newly added docs
+
+## Drivers
+### Drivers
+- MongoDB doesn't only interact via the shell
+- Lots of different libraries/packages for a variety of languages and frameworks
+    - Both official MongoDB libraries and community made libraries
+
+### Python
+- Python has 2 official drivers
+    - *PyMongo* (sync applications)
+    - *Motor* (async applications)
+- This example uses *PyMongo*
+
+```py
+import os
+from pymongo import MongoClient
+from dotenv import load_dotenv
+
+load_dotenv()
+client = MongoClient(
+    'mongodb://localhost:27017/admin?retryWrites=true&w=majority',
+    username=os.getenv('DB_USER'),
+    password=os.getenv('DB_PASSWORD')
+)
+
+db = client['myDatabase']
+collection = db['myCollection']
+
+doc = {'author': 'Tikki', 'message': 'hello world!'}
+
+doc_id = collection.insert_one(doc).inserted_id
+print(doc_id)
+
+found = collection.find_one()
+print(found)
+```
+
+### JavaScript
+- Node.js has 2 popular libraries
+    - *MongoDB*, official driver
+    - *Mongoose*, community library
+- *Mongoose* is a wrapper for MongoDB
+    - Automatically handles certain operations like opening/closing connections
+    - Forces you to define a schema
+- This example uses *Mongoose*
+
+```js
+const mongoose = require('mongoose');
+const { config } = require('dotenv');
+
+main().catch(err => console.log(err));
+
+async function main() {
+    config();
+
+    const URI = 'mongodb://0.0.0.0:27017/admin?retryWrites=true&w=majority';
+
+    await mongoose.connect(URI, {
+        dbName: 'myDatabase',
+        user: process.env.DB_USER,
+        pass: process.env.DB_PASSWORD
+    }).then(() => {
+        console.log('Connection established with MongoDB');
+    }).catch(error => console.error(error.message));
+
+    const { Schema } = mongoose;
+    const authorSchema = new Schema({
+        author: String,
+        message: String
+    }, { db: 'myDatabase', collection: 'myCollection' });
+    const Author = mongoose.model('Author', authorSchema);
+
+    const author = new Author({ author: 'Tikki', message: 'hello world!' });
+    await author.save((error) => {
+        if (error) {
+            return console.log(`Error has occurred: ${error}`);
+        }
+
+        console.log('Document is successfully saved.');
+
+        Author.find(
+            {},
+            function (error, documents) {
+                if (error) {
+                return console.log(`Error has occurred: ${error}`);
+                }
+                console.log('document found:', documents);
+            }
+        );
+    })
+}
+```
+
+### PHP
+- MongoDB's official driver is the most common way
+- Requires both the driver and the extension
+
+```php
+<?php
+
+require_once __DIR__ . '/vendor/autoload.php';
+
+$dotenv = Dotenv\Dotenv::createImmutable(__DIR__);
+$dotenv->load();
+
+$client = new MongoDB\Client(
+    'mongodb://' . $_ENV['MDB_USER'] . ':' . $_ENV['MDB_PASSWORD'] . '@localhost:27017/admin?retryWrites=true&w=majority'
+);
+
+$collection = $client->selectCollection('sample_data', 'testphp');
+
+$document = $collection->insertOne([
+    'author' => 'Naomi',
+    'message' => 'hello world!',
+]);
+
+$document = $collection->findOne();
+
+var_dump($document);
+
+?>
+```
