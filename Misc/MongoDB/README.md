@@ -124,7 +124,7 @@ https://www.linkedin.com/learning/mongodb-essential-training/features-of-mongodb
     - Each database has 1+ collections
     - Each collection has 1+ documents
 - We use the `use` command to switch between databases (ex: `use users`)
-- To create a new document, can do something like this
+- To create a new document, can do something like this:
     ```js
     db.authors.insertOne({name: 'Tikki Cui'})
     ```
@@ -167,7 +167,7 @@ https://www.linkedin.com/learning/mongodb-essential-training/features-of-mongodb
 - <u>Durability</u> is a property that guarantees acknowledged writes are permanently stored in DB
     - Even if DB is unavailable after
     - Can be configured to be high (slower writes) or low (faster writes)
-- We use a `writeConcern` to config the durability, which is passed as a 2nd param
+- We use a `writeConcern` to config the durability, which is passed as a 2nd param:
     ```js
     db.authors.insertOne(
         {name: 'Tikki'},
@@ -194,7 +194,7 @@ https://www.linkedin.com/learning/mongodb-essential-training/features-of-mongodb
     ```js
     db.movies.findOne({'genres.0': 'Musical'})
     ```
-- For finds, we can specify a `readConcern`
+- For finds, we can specify a `readConcern`:
     ```js
     db.authors.find({}).readConcern('majority')
     ```
@@ -242,7 +242,7 @@ https://www.linkedin.com/learning/mongodb-essential-training/features-of-mongodb
     ```js
     db.inventory.findOne({$and: [{'variations.quantity': {'$ne': 0}}, {'variations.quantity': {$exists: true}}]})
     ```
-- Example with `$not`
+- Example with `$not`:
     ```js
     db.inventory.findOne({'variations.price': {$not: {$gt: 2000}}})
     ```
@@ -251,7 +251,7 @@ https://www.linkedin.com/learning/mongodb-essential-training/features-of-mongodb
 - The `.sort()` method can be chained to a `.find()` to sort the results
     - Pass in the field
     - Use `1` or `-1` for ascending/descending
-- Example
+- Example:
     ```js
     db.movies.find({}).sort({title: 1})
     ```
@@ -279,7 +279,7 @@ https://www.linkedin.com/learning/mongodb-essential-training/features-of-mongodb
     ```
 
 ### Arrays
-- We can make a normal query with array fields
+- We can make a normal query with array fields like so:
     ```js
     db.movies.find({actors: 'Tom Holland'})
     ```
@@ -287,11 +287,11 @@ https://www.linkedin.com/learning/mongodb-essential-training/features-of-mongodb
 - There are some special operators we can use as well
     - `$all` all specified entries have to be present
     - `$elemMatch` checks different properties for a single array element
-- Example with `$all`
+- Example with `$all`:
     ```js
     db.movies.find({genres: {$all: ['Comedy', 'Drama']}})
     ```
-- Example with `$elemMatch`
+- Example with `$elemMatch`:
     ```js
     db.inventory.find({variations: {$elemMatch: {variation: 'Blue', quantity: {$gte: 8}}}})
     ```
@@ -299,13 +299,19 @@ https://www.linkedin.com/learning/mongodb-essential-training/features-of-mongodb
     - `$push` add element to array
     - `$pop` remove element from array
     - `$addToSet` adds only if element doesn't exist
-- Example with `$push`
+- Example with `$push`:
     ```js
-    db.movies.updateOne({_id: ObjectId('123')}), {$push: {genres: 'Action'}}
+    db.movies.updateOne(
+        {_id: ObjectId('123')},
+        {$push: {genres: 'Action'}}
+    )
     ```
-- Example with `$pop`
+- Example with `$pop`:
     ```js
-    db.movies.updateOne({_id: ObjectId('123')}), {$push: {genres: 1}}
+    db.movies.updateOne(
+        {_id: ObjectId('123')},
+        {$pop: {genres: 1}}
+    )
     ```
     - We specify `-1` or `1` for first/last element in array
 
@@ -333,10 +339,250 @@ https://www.linkedin.com/learning/mongodb-essential-training/features-of-mongodb
 ### `$expr`
 - Basic queries can only compare a field value with a constant
 - `$expr` lets us compare multiple fields
-- Example
+- Example:
     ```js
     db.sales.find({$expr: {$gt: ['$price', '$cost']}})
     ```
     - Compares the `price` and `cost` fields
     - Note that we have to prefix with `$` to indicate it's a field name and not a string literal
     - Returns all documents where `price` is greater than `cost`
+
+## Aggregation Pipelines
+### Overview of Stages
+- <u>Aggregations</u> lets us create pipelines for multiple queries
+- Provides advanced data manipulation and search
+- Each pipeline consists of 1+ stages
+    - Some stages may need to wait for process to complete before passing results
+    - Others can pass results as they finish
+- We use the `db.<collection>.aggregate([stage1, stage2])` command
+
+### `$group`
+- `$group` lets us group data according to certain criteria
+- Requires specifying a field to use as the unique `_id`
+- Example:
+    ```js
+    db.inventory.aggregate([{$group: {_id: '$source'}}])
+    ```
+    - Finds each unique `source` value
+    - Creates corresponding groups with the source as the ID
+- A more complex example
+    ```js
+    db.inventory.aggregate([{$group: {
+        _id: '$source',
+        count: {$sum: 1},
+        items: {$push: '$name'},
+        avg_price: {$avg: '$price'}
+    }}])
+    ```
+    - Creates a group for each unique `source` value
+    - Counts the number of docs with that value
+    - Pushes each doc `name` into a list of `items`
+    - Calculates the average price for the group
+
+### `$bucket`
+- `$bucket` is a more flexible version of `$group`
+- Instead of matching an exact value, you can specify a range of values or criteria
+- Example:
+    ```js
+    db.inventory.aggregate([{$bucket: {
+        groupBy: '$year',
+        boundaries: [1980, 1990, 2000, 2010, 2020],
+        default: 'Other',
+        output: {
+            count: {$sum: 1},
+            cars: {$push: {name: '$name', model: '$model'}}
+        }
+    }}])
+    ```
+    - This creates 4 buckets of 10-year intervals
+    - The default group of `Other` is for any doc that doesn't fall into a bucket
+    - We use `output` to customize what is placed into the buckets
+- A variation is `$bucketAuto`
+    - Automatically defines boundaries
+    - We specify the number of buckets and it'll try to make them as evenly distributed as possible
+- Example:
+    ```js
+    db.inventory.aggregate([{$bucketAuto: {
+        groupBy: '$year',
+        buckets: 5
+    }}])
+    ```
+### `$unwind`
+- If we have an array of documents, we can use `$unwind` to create a new document for each array element
+- Let's say we have a sample document that looks like this:
+    ```js
+    {
+        _id: '320939006-1',
+        name: 'Scion',
+        model: 'xB',
+        year: 2008,
+        price: 2828.45,
+        source: 'Meemm',
+        sale_frequency: 'Yearly',
+        variations: [
+            { variation: 'Purple', quantity: 28 },
+            { variation: 'Violet', quantity: 8 }
+        ]
+    }
+    ```
+- We can create a new document for each variation like this:
+    ```js
+    db.inventory.aggregate([{$unwind: '$variations'}])
+    ```
+- This will result in 2 new documents like this:
+    ```js
+    [
+        {
+            _id: '320939006-1',
+            name: 'Scion',
+            model: 'xB',
+            year: 2008,
+            price: 2828.45,
+            source: 'Meemm',
+            sale_frequency: 'Yearly',
+            variations: { variation: 'Purple', quantity: 28 }
+        },
+        {
+            _id: '320939006-1',
+            name: 'Scion',
+            model: 'xB',
+            year: 2008,
+            price: 2828.45,
+            source: 'Meemm',
+            sale_frequency: 'Yearly',
+            variations: { variation: 'Violet', quantity: 8 }
+        }
+    ]
+    ```
+- We can add a `$match` operator to specify which documents to aggregate:
+    ```js
+    db.inventory.aggregate([
+        {$match: 'variations.variation': 'Purple'},
+        {$unwind: '$variations'},
+        {$match: 'variations.variation': 'Purple'}
+    ])
+    ```
+    - This creates a new doc for each purple order
+    - The first match filters out documents that don't have a purple variation
+    - Then we can unwind each doc
+    - Finally, we do another match to only select the purple unwound docs
+
+### `$merge` and `$out`
+- `$out` lets us store the results of a pipeline in a new collection
+- We just need to add it to our existing pipeline:
+    ```js
+    db.inventory.aggregate([
+        {$match: 'variations.variation': 'Purple'},
+        {$unwind: '$variations'},
+        {$match: 'variations.variation': 'Purple'},
+        {$out: {db: 'sample_data', coll: 'new_collection'}}
+    ])
+    ```
+- Very useful feature
+    - Can store results of aggregation instead of calling it over and over again
+    - Creates new set of data without modifying original collection
+- `$merge` is similar to `$out` but it lets you merge into existing collection
+    ```js
+    db.inventory.aggregate([
+        {$match: 'variations.variation': 'Purple'},
+        {$unwind: '$variations'},
+        {$match: 'variations.variation': 'Purple'},
+        {$merge: {
+            into: 'new_collection',
+            on: '_id',
+            whenMatched: 'keepExisting',
+            whenNotMatched: 'insert'
+        }}
+    ])
+    ```
+    - `into` name of collection to merge into
+    - `on` the property to check for duplicates
+    - `whenMatched` what to do if duplicate found (we keep existing)
+    - `whenNotMatched` what to do if no duplicate found (we insert the doc)
+
+### `$function`
+- The `$function` operator lets us code custom JS functions to operate on document fields
+    ```js
+    db.movies.aggregate([
+        {
+            $project: {
+                title: 1,
+                actors: {
+                    $function: {
+                        body: 'function(actors) { return actors.sort(); }',
+                        args: [ '$actors' ],
+                        lang: 'js'
+                    }
+                }
+            }
+        }
+    ])
+    ```
+- We use the `$project` stage to keep only the `title` and `actors` field
+- The `$function` operator takes in 3 arguments
+    - `body` the JS function itself
+    - `args` any arguments to pass into the function
+    - `lang` what language 
+
+### `$lookup`
+- `$lookup` lets us perform joins by pulling in data from another collection with matching field values
+    ```js
+    db.orders.aggregate([
+        {$lookup: {
+                from: 'inventory',
+                localField: 'car_id',
+                foreignField: '_id',
+                as: 'car_id'
+        } }
+    ])
+    ```
+    - `from` collection we're pulling data from
+    - `localField` the field in `orders`
+    - `foreignField` the field in `inventory`
+    - `as` what to name the resulting field 
+- Important notes
+    - `foreignField` should have an index if this join happens often
+    - Common query patterns should rarely require joins
+    - MongoDB's model is that all relevant data should be in the same document
+
+### Performance
+- Aggregation pipelines are useful but also more computationally expensive
+- Keep an eye on performance issues especially if:
+    - Amount of data is large
+    - Operation runs frequently
+    - Operation needs to be fast
+    - We can use `.explain('executionStats')` to view performance metrics
+    ```js
+    db.movies.explain('executionStats').aggregate( [
+        { $project: {
+            release_year: {$year: '$release_year'},
+            title: 1
+        } },
+        { $lookup: {
+            from: 'inventory',
+            localField: 'release_year',
+            foreignField: 'year',
+            as: 'year'
+        } }
+    ] )
+    ```
+- MongoDB comes up with several <u>query plans</u> on how to fetch the data
+    - It'll run each one and find the fastest one
+    - Then it uses the winner on the rest of the data
+- You can check for slow queries with this command:
+    ```js
+    db.setProfilingLevel(1, {slowms: 20})
+    ```
+    - Finds queries that execute slower than the specified `slowms` threshold
+    - Stores its findings in `system.profile` database
+    - Access these logs with `db['system.profile'].find()`
+- Common aggregation optimizations
+    - Use `$sort` and `$limit`
+    - `$project` should be the final stage
+    - Use hinting (ex: `db.collection.aggregate(pipeline, {hint: 'index_name'})` to manually specify the index to use)
+    - Analytic nodes
+    - Kill slow/blocking operations with
+        ```js
+        > db.currentOp(true)
+        > db.adminCommand({'killOp': 1, 'op': <OP_NUMBER>})
+        ```
