@@ -1,5 +1,5 @@
 # MongoDB Essential Training
-https://www.linkedin.com/learning/mongodb-essential-training/features-of-mongodb
+https://www.linkedin.com/learning/mongodb-essential-training
 
 ## Install MongoDB (Windows)
 1. Install *MongoDB* from https://www.mongodb.com/try/download/community
