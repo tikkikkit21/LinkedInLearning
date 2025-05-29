@@ -12,3 +12,16 @@ https://www.linkedin.com/learning/ai-projects-with-python-tensorflow-and-nltk
     - Train model to predict new images
     - Predict the categories on new images
 
+## Sentiment Analysis
+- *NLTK* stands for Natural Language Toolkit
+- Features
+    - Text processing
+    - Classification
+    - Tagging
+    - Parsing
+    - Semantic reasoning
+- To build our sentiment analysis model, we need to:
+    - Preprocess text
+    - Extract features
+    - Train classifier
+    - Evaluate classifier
