@@ -25,3 +25,7 @@ https://www.linkedin.com/learning/ai-projects-with-python-tensorflow-and-nltk
     - Extract features
     - Train classifier
     - Evaluate classifier
+
+## Recommendation System
+- We can use a simple KNN classifier to recommend movies
+- Finds the most similar movies based on features
