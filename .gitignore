@@ -2,7 +2,8 @@ node_modules
 __pycache__
 .env
 .R*
-.vscode
+.vscode/
+venv/
 
 # Unity
 Library
