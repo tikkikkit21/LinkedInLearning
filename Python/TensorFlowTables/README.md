@@ -19,7 +19,7 @@ https://www.linkedin.com/learning/tensorflow-neural-networks-and-working-with-ta
     - We take the grid row by row and append to our flattened row
     - Result is a long vector of 28x28 = 784 values
 
-## Loss, Gradient Descent, Optimizers
+## Working with Loss, Gradient Descent, Optimizers
 ### Loss
 - The loss function determine the quantity that will be minimized during training
 
@@ -39,3 +39,16 @@ https://www.linkedin.com/learning/tensorflow-neural-networks-and-working-with-ta
 ### Optimizers
 - Optimizers determine how the model is updated based on loss function
 - Uses a variant of stochastic gradient descent (SGD)
+
+## Working with Tabular Data
+### Intro to Titanic Dataset
+- The *Titanic* dataset is a binary classification problem
+- TensorFlow can be useful for setting up data pipelines
+    - Handles large amounts of complex data
+    - Uses the `tf.data` API
+- To create an input pipeline, we need a data source
+
+### Feature Engineering
+- Feature engineering is the process to use domain knowledge in order to extract features from raw data
+- One process we can perform is normalizing features
+- We can also one-hot encode categorical features
